@@ -26,7 +26,7 @@ Gem::Specification.new() do |spec|
   spec.email       = ['bradley@esotericpig.com']
   spec.licenses    = ['MIT']
   spec.homepage    = 'https://github.com/esotericpig/attr_bool'
-  spec.summary     = 'Finally attr_accessor & attr_reader with question marks for booleans!'
+  spec.summary     = 'Finally attr_accessor & attr_reader with question marks for booleans!?'
   spec.description = spec.summary +
     ' Simply use one the following: attr_accessor?, attr_reader?, attr_bool, attr_bool?.' \
     ' Default values can also be passed in.'

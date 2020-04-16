@@ -32,6 +32,16 @@ desc 'Generate doc (YARDoc)'
 task :doc => [:yard] do |task|
 end
 
+desc 'Generate doc for tests too (for checking macros)'
+task :doc_test do |task|
+  ENV['doctest'] = 'y'
+  
+  doc_task = Rake::Task[:doc]
+  
+  doc_task.reenable()
+  doc_task.invoke()
+end
+
 Rake::TestTask.new() do |task|
   task.libs = ['lib','test']
   task.pattern = File.join('test','**','*_test.rb')
@@ -49,4 +59,8 @@ YARD::Rake::YardocTask.new() do |task|
   task.options << '--protected' # Show protected methods
   #task.options += ['--template-path',File.join('yard','templates')]
   task.options += ['--title',"attr_bool v#{AttrBool::VERSION} Doc"]
+  
+  task.before = Proc.new() do
+    task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s().casecmp?('y')
+  end
 end

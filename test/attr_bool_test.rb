@@ -44,7 +44,7 @@ class TestBag
   attr_bool      :doc_bool   # @!macro attach attr_bool
   attr_bool?     :doc_boolq  # @!macro attach attr_bool?
   attr_booler    :doc_booler # @!macro attach attr_booler
-  attr_booler    :doc_boolor # @!macro attach attr_boolor
+  attr_boolor    :doc_boolor # @!macro attach attr_boolor
   
   attr_accessor? :acc
   attr_accessor? :acc1,1

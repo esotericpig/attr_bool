@@ -101,8 +101,8 @@ task :benchmark do |task|
   
   Module.prepend ModuleExt
   
-  puts '---'
-  Benchmark.bm() do |bm|
+  puts
+  Benchmark.bmbm() do |bm|
     bm.report('class_eval   ') do
       class ClassEvalTest
         do_class_eval :ce
@@ -122,11 +122,13 @@ task :benchmark do |task|
     end
   end
   
-  puts '---'
-  Benchmark.bm() do |bm|
+  str = 'str' # Work around warning
+  
+  puts
+  Benchmark.bmbm() do |bm|
     bm.report('?:') do
       0.upto(N1) do |i|
-        x = 'str' ? true : false
+        x = str   ? true : false
         x = nil   ? true : false
         x = true  ? true : false
         x = false ? true : false
@@ -136,7 +138,7 @@ task :benchmark do |task|
     
     bm.report('!!') do
       0.upto(N1) do |i|
-        y = !!'str'
+        y = !!str
         y = !!nil
         y = !!true
         y = !!false
@@ -144,4 +146,6 @@ task :benchmark do |task|
       end
     end
   end
+  
+  puts
 end

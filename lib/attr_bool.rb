@@ -15,6 +15,14 @@
 
 
 ###
+# Benchmarks are kind of meaningless, but after playing around with some,
+# I found the following to be the case on my system:
+# - +define_method+ is faster than +module_eval+ & +class_eval+
+# - +? true : false+ (ternary operator) is faster than +!!+ (surprisingly)
+# 
+# To run benchmark code:
+#   $ bundle exec rake benchmark
+# 
 # @author Jonathan Bradley Whited (@esotericpig)
 # @since  0.1.0
 ###
@@ -35,7 +43,7 @@ module AttrBool
       end
       
       if default.nil?() && reader_block.nil?()
-        last = var_ids.last
+        last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
           default = var_ids.pop()
@@ -52,7 +60,7 @@ module AttrBool
       no_default = (default.nil?() && !block)
       
       if no_default
-        last = var_ids.last
+        last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
           default = var_ids.pop()
@@ -99,7 +107,7 @@ module AttrBool
       end
       
       if default.nil?() && reader_block.nil?()
-        last = var_ids.last
+        last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
           default = var_ids.pop()
@@ -117,7 +125,7 @@ module AttrBool
       no_default = (default.nil?() && !block)
       
       if no_default
-        last = var_ids.last
+        last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
           default = var_ids.pop()

@@ -94,6 +94,12 @@ module AttrBool
           define_method(:"#{var_id}=",&block)
         end
       else
+        last = var_ids[-1]
+        
+        if !last.is_a?(String) && !last.is_a?(Symbol)
+          raise ArgumentError,'default value not allowed for writer'
+        end
+        
         attr_writer(*var_ids)
       end
     end
@@ -155,6 +161,14 @@ module AttrBool
     end
     
     def attr_booler(*var_ids,&block)
+      if !block
+        last = var_ids[-1]
+        
+        if !last.is_a?(String) && !last.is_a?(Symbol)
+          raise ArgumentError,'default value not allowed for writer'
+        end
+      end
+      
       var_ids.each() do |var_id|
         var_id_eq = :"#{var_id}="
         

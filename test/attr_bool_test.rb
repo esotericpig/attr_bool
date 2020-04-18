@@ -32,10 +32,9 @@ class TestBag
     @acc = nil
     @acc5 = nil
     @acc6 = nil
-    
-    @boo = nil
-    @boo5 = nil
-    @boo6 = nil
+    @acc15 = nil
+    @acc16 = nil
+    @acc17 = nil
   end
   
   attr_accessor? :doc_acc    # @!macro attach attr_accessor?
@@ -70,6 +69,13 @@ class TestBag
     @hidden.odd?()
   end
   
+  attr_accessor? 'acc15'
+  attr_accessor? 'acc16','acc17'
+  attr_accessor? 'acc18',default: 'str'
+  attr_accessor? 'acc19','acc20',default: 'str'
+  attr_accessor? 'acc21',default: :sym
+  attr_accessor? 'acc22','acc23',default: :sym
+  
   attr_bool :boo
   attr_bool :boo1,1
   attr_bool :boo2,default: 2
@@ -93,6 +99,13 @@ class TestBag
     @hidden = value + 1 unless value.nil?()
     @hidden.odd?()
   end
+  
+  attr_bool 'boo15'
+  attr_bool 'boo16','boo17'
+  attr_bool 'boo18',default: 'str'
+  attr_bool 'boo19','boo20',default: 'str'
+  attr_bool 'boo21',default: :sym
+  attr_bool 'boo22','boo23',default: :sym
   
   attr_boolor :bor
 end
@@ -138,6 +151,30 @@ class AttrBoolTest < Minitest::Test
     @bag.acc13 = @bag.acc14 = 0
     assert_equal true,@bag.acc13?()
     assert_equal true,@bag.acc14?()
+    
+    assert_nil @bag.acc15?()
+    assert_nil @bag.acc16?()
+    assert_nil @bag.acc17?()
+    @bag.acc15 = @bag.acc16 = @bag.acc17 = true
+    assert_equal true,@bag.acc15?()
+    assert_equal true,@bag.acc16?()
+    assert_equal true,@bag.acc17?()
+    
+    assert_equal 'str',@bag.acc18?()
+    assert_equal 'str',@bag.acc19?()
+    assert_equal 'str',@bag.acc20?()
+    @bag.acc18 = @bag.acc19 = @bag.acc20 = true
+    assert_equal true,@bag.acc18?()
+    assert_equal true,@bag.acc19?()
+    assert_equal true,@bag.acc20?()
+    
+    assert_equal :sym,@bag.acc21?()
+    assert_equal :sym,@bag.acc22?()
+    assert_equal :sym,@bag.acc23?()
+    @bag.acc21 = @bag.acc22 = @bag.acc23 = true
+    assert_equal true,@bag.acc21?()
+    assert_equal true,@bag.acc22?()
+    assert_equal true,@bag.acc23?()
   end
   
   def test_attr_bool()
@@ -172,6 +209,30 @@ class AttrBoolTest < Minitest::Test
     @bag.boo13 = @bag.boo14 = 0
     assert_equal true,@bag.boo13?()
     assert_equal true,@bag.boo14?()
+    
+    assert_equal false,@bag.boo15?()
+    assert_equal false,@bag.boo16?()
+    assert_equal false,@bag.boo17?()
+    @bag.boo15 = @bag.boo16 = @bag.boo17 = true
+    assert_equal true,@bag.boo15?()
+    assert_equal true,@bag.boo16?()
+    assert_equal true,@bag.boo17?()
+    
+    assert_equal true,@bag.boo18?()
+    assert_equal true,@bag.boo19?()
+    assert_equal true,@bag.boo20?()
+    @bag.boo18 = @bag.boo19 = @bag.boo20 = nil
+    assert_equal false,@bag.boo18?()
+    assert_equal false,@bag.boo19?()
+    assert_equal false,@bag.boo20?()
+    
+    assert_equal true,@bag.boo21?()
+    assert_equal true,@bag.boo22?()
+    assert_equal true,@bag.boo23?()
+    @bag.boo21 = @bag.boo22 = @bag.boo23 = nil
+    assert_equal false,@bag.boo21?()
+    assert_equal false,@bag.boo22?()
+    assert_equal false,@bag.boo23?()
   end
   
   def test_attr_boolor()

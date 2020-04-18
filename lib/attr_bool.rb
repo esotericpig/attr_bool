@@ -50,10 +50,8 @@ module AttrBool
         end
       end
       
-      var_ids.each() do |var_id|
-        attr_reader? var_id,default: default,&reader_block
-        attr_writer? var_id,&writer_block
-      end
+      attr_reader?(*var_ids,default: default,&reader_block)
+      attr_writer?(*var_ids,&writer_block)
     end
     
     def attr_reader?(*var_ids,default: nil,&block)
@@ -89,14 +87,14 @@ module AttrBool
       end
     end
     
-    # This should only be used when you want to pass a block/proc in.
+    # This should only be used when you want to pass in a block/proc.
     def attr_writer?(*var_ids,&block)
-      var_ids.each() do |var_id|
-        if block
+      if block
+        var_ids.each() do |var_id|
           define_method(:"#{var_id}=",&block)
-        else
-          attr_writer var_id
         end
+      else
+        attr_writer(*var_ids)
       end
     end
     
@@ -114,10 +112,8 @@ module AttrBool
         end
       end
       
-      var_ids.each() do |var_id|
-        attr_bool?  var_id,default: default,&reader_block
-        attr_booler var_id,&writer_block
-      end
+      attr_bool?(*var_ids,default: default,&reader_block)
+      attr_booler(*var_ids,&writer_block)
     end
     alias_method :attr_boolor,:attr_bool
     

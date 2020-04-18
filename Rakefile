@@ -66,6 +66,7 @@ YARD::Rake::YardocTask.new() do |task|
   end
 end
 
+
 desc 'Benchmark define_method vs module_eval & ?: vs bangbang'
 task :benchmark do |task|
   N0 = 100_000
@@ -122,7 +123,7 @@ task :benchmark do |task|
     end
   end
   
-  str = 'str' # Work around warning
+  str = 'str' # Warning workaround
   
   puts
   Benchmark.bmbm() do |bm|

@@ -13,43 +13,52 @@ Easily create `attr` (attribute) methods that end with a question mark (`?`).
 require 'attr_bool'
 
 module Wearable
-  # These do not force a boolean (true or false) value.
-  attr_accessor? :in_fashion,:heavy
-  attr_reader?   :can_wear,true
-  attr_reader?   :button,:zip,false
+  # +attr_accessor?/reader?+ do not enforce boolean (true or false) values.
+  attr_accessor? :in_fashion,:in_season
+  attr_reader?   :can_wash,:can_wear,default: 'yes!'
 end
 
 class BananaHammock
   include Wearable
   
-  # `attr_bool*` force a boolean (true or false) value.
-  attr_bool  :princess,default: 'Consuela'
-  attr_bool? :can_swim,true
-  attr_bool?(:crap_bag) { can_swim? && princess? }
+  # +attr_bool*+ enforce boolean (true or false) values.
+  attr_bool   :princess,:prince,default: 'Consuela'
+  attr_bool?  :can_swim,:can_wink,true
+  attr_bool? (:crap_bag) { princess? && can_swim? }
+  attr_booler :friends
+  
+  def for_friends()
+    @friends
+  end
 end
 
-bh = BananaHammock.new()
+banham = BananaHammock.new()
 
-puts bh.in_fashion?.inspect  # => nil
-puts bh.heavy?.inspect       # => nil
+puts banham.in_fashion?  # => nil
+puts banham.in_season?   # => nil
+puts banham.can_wash?    # => 'yes!'
+puts banham.can_wear?    # => 'yes!'
 puts '---'
 
-puts bh.can_wear?  # => true
-puts bh.button?    # => false
-puts bh.zip?       # => false
-puts bh.princess?  # => true  (not 'Consuela')
-puts bh.can_swim?  # => true
-puts bh.crap_bag?  # => true
+puts banham.princess?  # => true (not 'Consuela')
+puts banham.prince?    # => true (not 'Consuela')
+puts banham.can_swim?  # => true
+puts banham.can_wink?  # => true
+puts banham.crap_bag?  # => true
 puts '---'
 
-bh.in_fashion = true
-bh.heavy      = false
-bh.princess   = nil
+banham.in_fashion = true
+banham.in_season  = 'always'
+banham.princess   = nil
+banham.prince     = 'Charming'
+banham.friends    = 'Valerie'
 
-puts bh.in_fashion?  # => true
-puts bh.heavy?       # => false
-puts bh.princess?    # => false (not nil)
-puts bh.crap_bag?    # => false
+puts banham.in_fashion?  # => true
+puts banham.in_season?   # => 'always'
+puts banham.princess?    # => false (not nil)
+puts banham.prince?      # => true  (not 'Charming')
+puts banham.crap_bag?    # => false (dynamic; because +princess?+ is now false)
+puts banham.for_friends  # => true  (not 'Valerie')
 ```
 
 ## Contents
@@ -118,202 +127,116 @@ Simply use `attr_accessor?` and/or `attr_reader?` with 1 or more Symbols and/or 
 
 These do **not** force the values to be booleans (true or false).
 
-For most purposes, this will be adequate.
+For most purposes, this is adequate.
 
 ```Ruby
 require 'attr_bool'
 
 class Game
-  attr_accessor? :running
-  attr_reader?   :fps,'loop'
-  attr_accessor? :music,:pause,:sound
+  attr_accessor? :running,'loop'
+  attr_reader?   :fps,'music'
   
   def initialize()
-    @music = true
-    @sound = true
-  end
-  
-  def run()
-    @fps     = 60
-    @loop    = :main
-    @pause   = false
-    @running = true
-  end
-  
-  def pause()
-    @loop    = :pause_menu
-    @pause   = true
     @running = false
+    @loop    = nil
+    @fps     = 60
+    @music   = 'Beatles'
   end
 end
 
 game = Game.new()
 
-puts game.running?.inspect # => nil
-
-game.running = 'Waiting...'
-
-puts game.running?  # => Waiting...
-
-game.run()
-
-puts game.running?  # => true
+puts game.running?  # => false
+puts game.loop?     # => nil
 puts game.fps?      # => 60
-puts game.loop?     # => main
-puts game.pause?    # => false
-puts game.music?    # => true
-puts game.sound?    # => true
+puts game.music?    # => 'Beatles'
 
-game.music = false
-game.sound = false
-game.pause()
+game.running = true
+game.loop    = :main
 
-puts game.running?  # => false
-puts game.loop?     # => pause_menu
-puts game.pause?    # => true
-puts game.music?    # => false
-puts game.sound?    # => false
+puts game.running?  # => true
+puts game.loop?     # => :main
 ```
 
-There is also an `attr_writer?`, but it simply calls the standard `attr_writer` unless you pass in a [block](#using-with-blockproclambda-).
+There is also `attr_writer?`, but it simply calls the standard `attr_writer` unless you pass in a [block](#using-with-blockproclambda-).
 
-To force the values to be booleans (true or false), use `attr_bool` (accessor), `attr_bool?` (reader), and/or `attr_booler` (writer).
+To enforce boolean (true or false) values, use...
 
-These always check the values, which makes them slightly slower.
+- `attr_bool` or `attr_boolor` (accessor)
+- `attr_bool?` (reader)
+- `attr_booler` (writer)
+
+These are slightly slower due to always checking the values and do not set the values directly.
 
 ```Ruby
 require 'attr_bool'
 
 class Game
-  attr_bool   :running
-  attr_bool?  :fps,'loop'
-  attr_bool   :music,:pause,:sound
-  attr_booler :name
+  attr_bool   :running,'loop'
+  attr_bool?  :fps,'music'
+  attr_booler :sound
   
   def initialize()
-    @music = true
-    @sound = true
+    @fps   = 60
+    @music = 'Beatles'
+    @sound = false
   end
   
-  def run()
-    @fps     = 60
-    @loop    = :main
-    @pause   = false
-    @running = true
-  end
-  
-  def pause()
-    @loop    = :pause_menu
-    @pause   = true
-    @running = false
-  end
-  
-  def show_name()
-    puts @name
+  def loud?()
+    music? && @sound == true
   end
 end
 
 game = Game.new()
 
-puts game.running?.inspect # => false
-
-game.name    = 'Starlord'
-game.running = 'Waiting...'
-
-game.show_name()    # => true
-puts game.running?  # => true
-
-game.run()
-
-puts game.running?  # => true
-puts game.fps?      # => true
-puts game.loop?     # => true
-puts game.pause?    # => false
-puts game.music?    # => true
-puts game.sound?    # => true
-
-game.music = false
-game.sound = false
-game.pause()
-
 puts game.running?  # => false
-puts game.loop?     # => true
-puts game.pause?    # => true
-puts game.music?    # => false
-puts game.sound?    # => false
-```
+puts game.loop?     # => false
+puts game.fps?      # => true
+puts game.music?    # => true
+puts game.loud?     # => false
 
-`attr_boolor` (accessor) is also an alias to `attr_bool`.
+game.running = true
+game.loop    = :main
+game.sound   = 'loud!'
+
+puts game.running?  # => true
+puts game.loop?     # => true
+puts game.loud?     # => true
+```
 
 ### Using with Default [^](#contents)
 
-A default value can be passed in, but I don't recommend using it because it's slightly slower due to always checking the value and may result in warning messages (i.e., instance variable not initialized) due to not setting the instance variable directly. It's best to just set the default values the standard way in `initialize()`.
+A default value can be passed in, but I don't recommend using it because it's slightly slower due to always checking the value and not setting the instance variable directly.
 
-However, many Gems do this, so I also added this functionality.
+It's best to just set the default values the standard way in `initialize()`.
 
-If the last argument is not a `String` or a `Symbol`, then it will be used as the default value.
+However, many Gems do this, so I also added this functionality anyway.
 
-**Note:** `attr_writer?` &amp; `attr_booler` cannot take a default value.
+If the last argument is not a `Symbol` or a `String`, then it will be used as the default value.
+
+**Note:** `attr_writer?` &amp; `attr_booler` can **not** take in a default value.
 
 ```Ruby
 require 'attr_bool'
 
 class Game
-  attr_accessor? :running,false
+  attr_accessor? :running,:loop,false
   attr_reader?   :min_fps,:max_fps,60
-  attr_accessor? :music,:sound,:vibrate,true
   
-  attr_bool  :gravity,true
+  attr_bool  :gravity,:wind,true
   attr_bool? :min_force,:max_force,110
-  attr_bool  :dodge,:duck,:dip,false
-  
-  def show_state()
-    puts "running?   #{running?}"
-    puts "fps:       #{min_fps?}, #{max_fps?}"
-    puts "music?     #{@music}"
-    puts "sound?     #{@sound}"
-    puts "vibrate?   #{@vibrate}"
-    
-    puts "gravity?   #{gravity?}"
-    puts "min_force? #{min_force?}, #{max_force?}"
-    puts "dodge?     #{@dodge}"
-    puts "duck?      #{@duck}"
-    puts "dip?       #{@dip}"
-  end
 end
 
 game = Game.new()
 
-game.show_state()
-
-game.music   = 'Beatles'
-game.vibrate = false
-game.duck    = 'quack'
-
-puts '---'
-game.show_state()
-
-# running?   false
-# fps:       60, 60
-# music?     
-# sound?     
-# vibrate?   
-# gravity?   true
-# min_force? true, true
-# dodge?     
-# duck?      
-# dip?       
-# ---
-# running?   false
-# fps:       60, 60
-# music?     Beatles
-# sound?     
-# vibrate?   false
-# gravity?   true
-# min_force? true, true
-# dodge?     
-# duck?      true
-# dip?
+puts game.running?    # => false
+puts game.loop?       # => false
+puts game.min_fps?    # => 60
+puts game.max_fps?    # => 60
+puts game.gravity?    # => true
+puts game.wind?       # => true
+puts game.min_force?  # => true (not 110)
+puts game.max_force?  # => true (not 110)
 ```
 
 Instead of the last argument, you can use the `default:` keyword argument. In addition to being more clear, this allows you to pass in a `String` or a `Symbol`.
@@ -322,22 +245,22 @@ Instead of the last argument, you can use the `default:` keyword argument. In ad
 require 'attr_bool'
 
 class Game
-  attr_accessor? :music,default: 'Beatles'
-  attr_reader?   :loop,:state,default: :main
+  attr_accessor? :running,:loop,default: :main
+  attr_reader?   :music,:sound,default: 'quiet!'
 end
 
 game = Game.new()
 
-puts game.music?          # => Beatles
-puts game.loop?.inspect   # => :main
-puts game.state?.inspect  # => :main
+puts game.running?  # => :main
+puts game.loop?     # => :main
+puts game.music?    # => 'quiet!'
 ```
 
 ### Using with Block/Proc/Lambda [^](#contents)
 
 A block can be passed in for dynamic values, but I don't recommend using it.
 
-However, many Gems do this, so I also added this functionality.
+However, many Gems do this, so I also added this functionality anyway.
 
 ```Ruby
 require 'attr_bool'
@@ -362,18 +285,18 @@ attr_boolor    :doc_boolor # @!macro attach attr_boolor
 If you don't like the way these look, need more control, or they don't work, please use YARDoc's built-in ways:
 
 ```Ruby
-# @!attribute [r] heavy?
-#   @return [true,false] heavy or light?
 # @!attribute [r] can_swim?
 #   @return [true,false] can you swim in it?
-attr_reader? :heavy,:can_swim
+# @!attribute [r] can_wink?
+#   @return [true,false] can you wink at pretty people?
+attr_reader? :can_swim,:can_wink
 
 # @!attribute [rw] princess=(value),princess?
-#   @param value [true,false] it is Consuela or not!
-#   @return [true,false] is this Consuela?
+#   @param value [true,false] this is Ms. Consuela or not!
+#   @return [true,false] is this Ms. Consuela?
 # @!attribute [rw] crap_bag=(value),crap_bag?
-#   @param value [true,false] it is a Crap Bag or not!
-#   @return [true,false] is this Crap Bag?
+#   @param value [true,false] this is Mr. Crap Bag or not!
+#   @return [true,false] is this Mr. Crap Bag?
 attr_accessor? :princess,:crap_bag
 
 # @overload in_fashion?
@@ -387,10 +310,10 @@ attr_accessor? :in_fashion
 attr_reader? :can_wear,true
 
 # @!group My Attrs
-# @!attribute [r] button?
-attr_reader? :button
-# @!attribute [r] zip?
-attr_reader? :zip
+# @!attribute [r] in_season?
+attr_reader? :in_season
+# @!attribute [r] can_wash?
+attr_reader? :can_wash
 # @!endgroup
 ```
 

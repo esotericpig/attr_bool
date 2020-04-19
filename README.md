@@ -133,12 +133,12 @@ For most purposes, this is adequate.
 require 'attr_bool'
 
 class Game
-  attr_accessor? :running,'loop'
+  attr_accessor? :running,'looper'
   attr_reader?   :fps,'music'
   
   def initialize()
     @running = false
-    @loop    = nil
+    @looper  = nil
     @fps     = 60
     @music   = 'Beatles'
   end
@@ -147,15 +147,15 @@ end
 game = Game.new()
 
 puts game.running?  # => false
-puts game.loop?     # => nil
+puts game.looper?   # => nil
 puts game.fps?      # => 60
 puts game.music?    # => 'Beatles'
 
 game.running = true
-game.loop    = :main
+game.looper  = :main
 
 puts game.running?  # => true
-puts game.loop?     # => :main
+puts game.looper?   # => :main
 ```
 
 There is also `attr_writer?`, but it simply calls the standard `attr_writer` unless you pass in a [block](#using-with-blockproclambda-).
@@ -166,13 +166,13 @@ To enforce boolean (true or false) values, use...
 - `attr_bool?` (reader)
 - `attr_booler` (writer)
 
-These are slightly slower due to always checking the values and do not set the values directly.
+These are slightly slower due to always checking the values and do not set the instance variables directly.
 
 ```Ruby
 require 'attr_bool'
 
 class Game
-  attr_bool   :running,'loop'
+  attr_bool   :running,'looper'
   attr_bool?  :fps,'music'
   attr_booler :sound
   
@@ -190,17 +190,17 @@ end
 game = Game.new()
 
 puts game.running?  # => false
-puts game.loop?     # => false
+puts game.looper?   # => false
 puts game.fps?      # => true
 puts game.music?    # => true
 puts game.loud?     # => false
 
 game.running = true
-game.loop    = :main
+game.looper  = :main
 game.sound   = 'loud!'
 
 puts game.running?  # => true
-puts game.loop?     # => true
+puts game.looper?   # => true
 puts game.loud?     # => true
 ```
 
@@ -208,9 +208,7 @@ puts game.loud?     # => true
 
 A default value can be passed in, but I don't recommend using it because it's slightly slower due to always checking the value and not setting the instance variable directly.
 
-It's best to just set the default values the standard way in `initialize()`.
-
-However, many Gems do this, so I also added this functionality anyway.
+It's best to just set the default values the standard way in `initialize()`. However, many Gems do this, so I also added this functionality anyway.
 
 If the last argument is not a `Symbol` or a `String`, then it will be used as the default value.
 
@@ -220,7 +218,7 @@ If the last argument is not a `Symbol` or a `String`, then it will be used as th
 require 'attr_bool'
 
 class Game
-  attr_accessor? :running,:loop,false
+  attr_accessor? :running,:looper,false
   attr_reader?   :min_fps,:max_fps,60
   
   attr_bool  :gravity,:wind,true
@@ -230,7 +228,7 @@ end
 game = Game.new()
 
 puts game.running?    # => false
-puts game.loop?       # => false
+puts game.looper?     # => false
 puts game.min_fps?    # => 60
 puts game.max_fps?    # => 60
 puts game.gravity?    # => true
@@ -245,25 +243,71 @@ Instead of the last argument, you can use the `default:` keyword argument. In ad
 require 'attr_bool'
 
 class Game
-  attr_accessor? :running,:loop,default: :main
+  attr_accessor? :running,:looper,default: :main
   attr_reader?   :music,:sound,default: 'quiet!'
 end
 
 game = Game.new()
 
 puts game.running?  # => :main
-puts game.loop?     # => :main
+puts game.looper?   # => :main
 puts game.music?    # => 'quiet!'
+puts game.sound?    # => 'quiet!'
 ```
 
 ### Using with Block/Proc/Lambda [^](#contents)
 
-A block can be passed in for dynamic values, but I don't recommend using it.
+A block can be passed in for dynamic values, but I don't recommend using it. However, many Gems do this, so I also added this functionality anyway.
 
-However, many Gems do this, so I also added this functionality anyway.
+With blocks, you can quickly write a dynamic attribute that depends on other variable(s) or tests variable(s) in some other special way.
+
+**Note:** blocks do **not** update the instance variables; you must do this manually within the block. `attr_accessor?/reader?/writer?` &amp; `attr_bool*` with blocks are exactly the same code (i.e., boolean values are not enforced).
 
 ```Ruby
 require 'attr_bool'
+
+class Game
+  attr_reader?(:lag)  { print @ping,','; @ping > 300 }
+  attr_writer?(:ping) {|value| @ping = value.to_i() }
+  
+  # Define 1 block for both reader & writer together.
+  attr_accessor?(:sound) do |value=nil|
+    if value.nil? # Assume reader
+      print @sound,','
+      @sound > 0
+    else # Assume writer
+      @sound = value.to_i() % 100
+    end
+  end
+  
+  attr_bool?(:slow) { print @fps,','; @fps < 30 }
+  attr_booler(:fps) {|value| @fps = value.to_i() }
+  
+  # Define separate blocks.
+  attr_bool(:music,
+    reader: -> { print @music,','; !@music.nil? },
+    writer: ->(value) { @music = value.to_sym() }
+  )
+  
+  # Define only 1 block.
+  attr_accessor?(:frames,
+    reader: -> { @frames.odd? }
+  )
+end
+
+game = Game.new()
+
+game.ping   = 310.99
+game.sound  = 199.99
+game.fps    = 29.99
+game.music  = 'Beatles'
+game.frames = 1
+
+puts game.lag?     # => 310,true
+puts game.sound?   # => 99,true
+puts game.slow?    # => 29,true
+puts game.music?   # => :Beatles,true
+puts game.frames?  # => true
 ```
 
 ### Using with YARDoc [^](#contents)

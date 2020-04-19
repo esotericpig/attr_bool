@@ -16,7 +16,7 @@
 lib = File.expand_path(File.join('..','lib'),__FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require 'attr_bool'
+require 'attr_bool/version'
 
 
 Gem::Specification.new() do |spec|

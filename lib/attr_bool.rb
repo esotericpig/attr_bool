@@ -14,6 +14,9 @@
 #++
 
 
+require 'attr_bool/version'
+
+
 ###
 # Benchmarks are kind of meaningless, but after playing around with some,
 # I found the following to be the case on my system:
@@ -27,8 +30,6 @@
 # @since  0.1.0
 ###
 module AttrBool
-  VERSION = '0.1.0'
-  
   ###
   # This works for both +class+ & +module+ because +class+ extends +module+.
   # 

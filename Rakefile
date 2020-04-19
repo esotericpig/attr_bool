@@ -20,7 +20,7 @@ require 'rake/clean'
 require 'rake/testtask'
 require 'yard'
 
-require 'attr_bool'
+require 'attr_bool/version'
 
 
 CLEAN.exclude('.git/','stock/')
@@ -59,7 +59,7 @@ YARD::Rake::YardocTask.new() do |task|
   
   task.options << '--protected' # Show protected methods
   #task.options += ['--template-path',File.join('yard','templates')]
-  task.options += ['--title',"attr_bool v#{AttrBool::VERSION} Doc"]
+  task.options += ['--title',"attr_bool v#{AttrBool::VERSION} doc"]
   
   task.before = Proc.new() do
     task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s().casecmp?('y')

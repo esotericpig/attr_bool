@@ -20,6 +20,10 @@ require 'attr_bool'
 
 
 ###
+# Test +doc_*+ vars with:
+#   $ bundle exec rake doc_test
+#   $ xdg-open doc/TestBag.html
+# 
 # @author Jonathan Bradley Whited (@esotericpig)
 # @since  0.1.0
 ###

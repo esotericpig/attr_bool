@@ -400,6 +400,14 @@ Then open up [doc/TestBag.html](doc/TestBag.html) &amp; check the `doc_` methods
 
 `$ bundle exec rake release`
 
+### Benchmarks [^](#contents)
+
+There are some benchmarks that test `define_method` vs `module_eval` and `? true : false` vs `!!`.
+
+To run these on your system:
+
+`$ bundle exec rake benchmark`
+
 ## License [^](#contents)
 
 [MIT](LICENSE.txt)

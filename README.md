@@ -166,7 +166,7 @@ To enforce boolean (true or false) values, use...
 - `attr_bool?` (reader)
 - `attr_booler` (writer)
 
-These are slightly slower due to always checking the values and do not set the instance variables directly.
+These are slightly slower due to always checking the values.
 
 ```Ruby
 require 'attr_bool'

@@ -37,13 +37,13 @@ module AttrBool
   # @since  0.1.0
   ###
   module ModuleExt
-    def attr_accessor?(*var_ids,default: nil,reader_block: nil,writer_block: nil,&block)
+    def attr_accessor?(*var_ids,default: nil,reader: nil,writer: nil,&block)
       if block
-        reader_block = block if reader_block.nil?()
-        writer_block = block if writer_block.nil?()
+        reader = block if reader.nil?()
+        writer = block if writer.nil?()
       end
       
-      if default.nil?() && reader_block.nil?()
+      if default.nil?() && reader.nil?()
         last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
@@ -51,8 +51,8 @@ module AttrBool
         end
       end
       
-      attr_reader?(*var_ids,default: default,&reader_block)
-      attr_writer?(*var_ids,&writer_block)
+      attr_reader?(*var_ids,default: default,&reader)
+      attr_writer?(*var_ids,&writer)
     end
     
     def attr_reader?(*var_ids,default: nil,&block)
@@ -105,13 +105,13 @@ module AttrBool
       end
     end
     
-    def attr_bool(*var_ids,default: nil,reader_block: nil,writer_block: nil,&block)
+    def attr_bool(*var_ids,default: nil,reader: nil,writer: nil,&block)
       if block
-        reader_block = block if reader_block.nil?()
-        writer_block = block if writer_block.nil?()
+        reader = block if reader.nil?()
+        writer = block if writer.nil?()
       end
       
-      if default.nil?() && reader_block.nil?()
+      if default.nil?() && reader.nil?()
         last = var_ids[-1]
         
         if !last.is_a?(String) && !last.is_a?(Symbol)
@@ -119,8 +119,8 @@ module AttrBool
         end
       end
       
-      attr_bool?(*var_ids,default: default,&reader_block)
-      attr_booler(*var_ids,&writer_block)
+      attr_bool?(*var_ids,default: default,&reader)
+      attr_booler(*var_ids,&writer)
     end
     alias_method :attr_boolor,:attr_bool
     

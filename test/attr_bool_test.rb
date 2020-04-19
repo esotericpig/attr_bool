@@ -49,8 +49,8 @@ class TestBag
   attr_accessor? :acc1,1
   attr_accessor? :acc2,default: 2
   attr_accessor?(:acc3,
-    reader_block: lambda { @acc3.odd?() },
-    writer_block: lambda {|value| @acc3 = value + 1}
+    reader: lambda { @acc3.odd?() },
+    writer: lambda {|value| @acc3 = value + 1}
   )
   attr_accessor?(:acc4) do |value=nil|
     @acc4 = value + 1 unless value.nil?()
@@ -61,8 +61,8 @@ class TestBag
   attr_accessor? :acc7 ,:acc8,78
   attr_accessor? :acc9 ,:acc10,default: 910
   attr_accessor?(:acc11,:acc12,
-    reader_block: lambda { @hidden.odd?() },
-    writer_block: lambda {|value| @hidden = value + 1}
+    reader: lambda { @hidden.odd?() },
+    writer: lambda {|value| @hidden = value + 1}
   )
   attr_accessor?(:acc13,:acc14) do |value=nil|
     @hidden = value + 1 unless value.nil?()
@@ -80,8 +80,8 @@ class TestBag
   attr_bool :boo1,1
   attr_bool :boo2,default: 2
   attr_bool(:boo3,
-    reader_block: lambda { @boo3.odd?() },
-    writer_block: lambda {|value| @boo3 = value + 1}
+    reader: lambda { @boo3.odd?() },
+    writer: lambda {|value| @boo3 = value + 1}
   )
   attr_bool(:boo4) do |value=nil|
     @boo4 = value + 1 unless value.nil?()
@@ -92,8 +92,8 @@ class TestBag
   attr_bool :boo7 ,:boo8,78
   attr_bool :boo9 ,:boo10,default: 910
   attr_bool(:boo11,:boo12,
-    reader_block: lambda { @hidden.odd?() },
-    writer_block: lambda {|value| @hidden = value + 1}
+    reader: lambda { @hidden.odd?() },
+    writer: lambda {|value| @hidden = value + 1}
   )
   attr_bool(:boo13,:boo14) do |value=nil|
     @hidden = value + 1 unless value.nil?()

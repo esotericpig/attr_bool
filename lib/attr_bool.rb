@@ -125,15 +125,20 @@ module AttrBool
     alias_method :attr_boolor,:attr_bool
     
     def attr_bool?(*var_ids,default: nil,&block)
-      no_default = (default.nil?() && !block)
-      
-      if no_default
-        last = var_ids[-1]
+      if default.nil?()
+        no_default = !block
         
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop()
-          no_default = false
+        if no_default
+          last = var_ids[-1]
+          
+          if !last.is_a?(String) && !last.is_a?(Symbol)
+            default = var_ids.pop() ? true : false
+            no_default = false
+          end
         end
+      else
+        default = default ? true : false
+        no_default = false
       end
       
       var_ids.each() do |var_id|
@@ -153,7 +158,7 @@ module AttrBool
               if instance_variable_defined?(at_var_id)
                 instance_variable_get(at_var_id) ? true : false
               else
-                default ? true : false
+                default
               end
             end
           end

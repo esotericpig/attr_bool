@@ -125,7 +125,9 @@ module AttrBool
     alias_method :attr_boolor,:attr_bool
     
     def attr_bool?(*var_ids,default: nil,&block)
-      if default.nil?()
+      no_default = default.nil?()
+      
+      if no_default
         no_default = !block
         
         if no_default
@@ -138,7 +140,6 @@ module AttrBool
         end
       else
         default = default ? true : false
-        no_default = false
       end
       
       var_ids.each() do |var_id|

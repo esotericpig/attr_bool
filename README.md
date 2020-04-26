@@ -77,15 +77,15 @@ puts banham.for_friends  # => true  (not 'Valerie')
 
 Create an [issue](https://github.com/esotericpig/attr_bool/issues) to add your project.
 
-| Name | Links | Example |
+| Gem Name | Code | Example |
 | --- | --- | --- |
-| attr_asker | [[GitHub]](https://github.com/kitlangton/attr_asker) [[RubyGems]](https://rubygems.org/gems/attr_asker) | `attr_asker :running` |
-| attr_boolean | [[GitHub]](https://github.com/talentnest/attr_boolean) [[RubyGems]](https://rubygems.org/gems/attr_boolean) | `attr_boolean :running, default: true` |
-| named_accessors | [[GitHub]](https://github.com/zlw/named_accessors) [[RubyGems]](https://rubygems.org/gems/named_accessors) | `named_reader :running, as: :running?` |
-| attr_setting | [[GitHub]](https://github.com/merhard/attr_setting) [[RubyGems]](https://rubygems.org/gems/attr_setting) | `attr_setting :running, true` |
-| property-accessor | [[GitHub]](https://github.com/estepnv/property-accessor) [[RubyGems]](https://rubygems.org/gems/property-accessor) | `property(:running) { get(:running?); default { true } }` |
-| wannabe_bool | [[GitHub]](https://github.com/prodis/wannabe_bool) [[RubyGems]](https://rubygems.org/gems/wannabe_bool) | `attr_wannabe_bool :running` |
-| wardrobe | [[GitHub]](https://github.com/agensdev/wardrobe) [[RubyGems]](https://rubygems.org/gems/wardrobe) | `attribute :running, Wardrobe::Boolean, default: true` |
+| [attr_asker](https://rubygems.org/gems/attr_asker) | [[GitHub]](https://github.com/kitlangton/attr_asker) | `attr_asker :running` |
+| [attr_boolean](https://rubygems.org/gems/attr_boolean) | [[GitHub]](https://github.com/talentnest/attr_boolean) | `attr_boolean :running, default: true` |
+| [attr_setting](https://rubygems.org/gems/attr_setting) | [[GitHub]](https://github.com/merhard/attr_setting) | `attr_setting :running, true` |
+| [named_accessors](https://rubygems.org/gems/named_accessors) | [[GitHub]](https://github.com/zlw/named_accessors) | `named_reader :running, as: :running?` |
+| [property-accessor](https://rubygems.org/gems/property-accessor) | [[GitHub]](https://github.com/estepnv/property-accessor) | `property(:running) { get(:running?); default { true } }` |
+| [wannabe_bool](https://rubygems.org/gems/wannabe_bool) | [[GitHub]](https://github.com/prodis/wannabe_bool) | `attr_wannabe_bool :running` |
+| [wardrobe](https://rubygems.org/gems/wardrobe) | [[GitHub]](https://github.com/agensdev/wardrobe) | `attribute :running, Wardrobe::Boolean, default: true` |
 
 ## Setup [^](#contents)
 

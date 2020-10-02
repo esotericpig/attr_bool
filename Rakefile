@@ -23,7 +23,7 @@ require 'yard'
 require 'attr_bool/version'
 
 
-CLEAN.exclude('.git/','stock/')
+CLEAN.exclude('{.git,stock}/**/*')
 CLOBBER.include('doc/')
 
 

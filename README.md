@@ -1,4 +1,4 @@
-# attr_bool
+# AttrBool
 
 [![Gem Version](https://badge.fury.io/rb/attr_bool.svg)](https://badge.fury.io/rb/attr_bool)
 [![Build Status](https://travis-ci.org/esotericpig/attr_bool.svg?branch=master)](https://travis-ci.org/esotericpig/attr_bool)
@@ -412,6 +412,7 @@ To run these on your system:
 
 [MIT](LICENSE.txt)
 
+> AttrBool (https://github.com/esotericpig/attr_bool)
 > Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)  
 > 
 > Permission is hereby granted, free of charge, to any person obtaining a copy  

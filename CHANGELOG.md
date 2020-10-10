@@ -1,4 +1,4 @@
-# Changelog | attr_bool
+# Changelog | AttrBool
 
 Format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 

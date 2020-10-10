@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 #--
-# This file is part of attr_bool.
+# This file is part of AttrBool.
 # Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)
 # 
-# attr_bool is free software: you can redistribute it and/or modify it under
+# AttrBool is free software: you can redistribute it and/or modify it under
 # the terms of the MIT License.
 # 
-# You should have received a copy of the MIT License along with attr_bool.
+# You should have received a copy of the MIT License along with AttrBool.
 # If not, see <https://choosealicense.com/licenses/mit/>.
 #++
 
@@ -16,16 +16,15 @@
 require 'bundler/gem_tasks'
 
 require 'benchmark'
+require 'yard'
+
 require 'rake/clean'
 require 'rake/testtask'
-require 'yard'
 
 require 'attr_bool/version'
 
-
 CLEAN.exclude('{.git,stock}/**/*')
 CLOBBER.include('doc/')
-
 
 task default: [:test]
 
@@ -59,13 +58,12 @@ YARD::Rake::YardocTask.new() do |task|
   
   task.options << '--protected' # Show protected methods
   #task.options += ['--template-path',File.join('yard','templates')]
-  task.options += ['--title',"attr_bool v#{AttrBool::VERSION} doc"]
+  task.options += ['--title',"AttrBool v#{AttrBool::VERSION} doc"]
   
   task.before = Proc.new() do
     task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s().casecmp?('y')
   end
 end
-
 
 desc 'Benchmark define_method vs module_eval & ?: vs bangbang'
 task :benchmark do |task|

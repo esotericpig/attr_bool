@@ -3,13 +3,13 @@
 # frozen_string_literal: true
 
 #--
-# This file is part of attr_bool.
+# This file is part of AttrBool.
 # Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)
 # 
-# attr_bool is free software: you can redistribute it and/or modify it under
+# AttrBool is free software: you can redistribute it and/or modify it under
 # the terms of the MIT License.
 # 
-# You should have received a copy of the MIT License along with attr_bool.
+# You should have received a copy of the MIT License along with AttrBool.
 # If not, see <https://choosealicense.com/licenses/mit/>.
 #++
 

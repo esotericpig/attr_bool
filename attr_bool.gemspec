@@ -13,10 +13,7 @@
 #++
 
 
-lib = File.expand_path(File.join('..','lib'),__FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
-require 'attr_bool/version'
+require_relative 'lib/attr_bool/version'
 
 Gem::Specification.new() do |spec|
   spec.name        = 'attr_bool'
@@ -31,22 +28,23 @@ Gem::Specification.new() do |spec|
     ' Default values can also be passed in.'
   
   spec.metadata = {
-    'bug_tracker_uri' => 'https://github.com/esotericpig/attr_bool/issues',
-    'changelog_uri'   => 'https://github.com/esotericpig/attr_bool/blob/master/CHANGELOG.md',
     'homepage_uri'    => 'https://github.com/esotericpig/attr_bool',
     'source_code_uri' => 'https://github.com/esotericpig/attr_bool',
+    'changelog_uri'   => 'https://github.com/esotericpig/attr_bool/blob/master/CHANGELOG.md',
+    'bug_tracker_uri' => 'https://github.com/esotericpig/attr_bool/issues',
   }
   
-  spec.require_paths = ['lib']
-  
-  spec.files = Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{rb}')) +
-               %W( Gemfile #{spec.name}.gemspec Rakefile ) +
-               %w( LICENSE.txt )
-  
   spec.required_ruby_version = '>= 2.4'
+  spec.require_paths         = ['lib']
+  
+  spec.files = [
+    Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{erb,rb}')),
+    %W( Gemfile #{spec.name}.gemspec Rakefile ),
+    %w( LICENSE.txt ),
+  ].flatten()
   
   spec.add_development_dependency 'bundler' ,'~> 2.1'
   spec.add_development_dependency 'minitest','~> 5.14'
   spec.add_development_dependency 'rake'    ,'~> 13.0'
-  spec.add_development_dependency 'yard'    ,'~> 0.9'  # For doc
+  spec.add_development_dependency 'yard'    ,'~> 0.9'   # Documentation
 end

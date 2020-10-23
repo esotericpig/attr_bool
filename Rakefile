@@ -31,7 +31,7 @@ desc 'Generate doc'
 task :doc => [:yard] do |task|
 end
 
-desc 'Generate doc for tests too (for checking macros)'
+desc 'Generate doc for tests too'
 task :doc_test do |task|
   ENV['doctest'] = 'y'
   
@@ -42,9 +42,9 @@ task :doc_test do |task|
 end
 
 Rake::TestTask.new() do |task|
+  task.deps << :doc_test
   task.libs = ['lib','test']
   task.pattern = File.join('test','**','*_test.rb')
-  task.deps << :doc_test
   task.description += ": '#{task.pattern}'"
   task.verbose = false
   task.warning = true

@@ -80,6 +80,11 @@ Create an [issue](https://github.com/esotericpig/attr_bool/issues) to add your p
 | [wannabe_bool](https://rubygems.org/gems/wannabe_bool) | [[GitHub]](https://github.com/prodis/wannabe_bool) | `attr_wannabe_bool :running` |
 | [wardrobe](https://rubygems.org/gems/wardrobe) | [[GitHub]](https://github.com/agensdev/wardrobe) | `attribute :running, Wardrobe::Boolean, default: true` |
 
+Searches:
+
+- [The Ruby Toolbox](https://www.ruby-toolbox.com/search?q=attr+bool)
+- [RubyGems.org](https://rubygems.org/search?query=attr+OR+attribute)
+
 ## [//](#contents) Setup
 
 Add `attr_bool` to your *Gemspec* or *Gemfile*.

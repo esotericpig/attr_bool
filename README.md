@@ -33,13 +33,13 @@ banham = BananaHammock.new()
 banham.in_fashion = true
 banham.princess   = true
 
-banham.in_fashion?
-banham.can_wash?
-banham.princess?
-banham.crap_bag?
+p banham.in_fashion?  #=> true
+p banham.can_wash?    #=> nil
+p banham.princess?    #=> true
+p banham.crap_bag?    #=> false
 ```
 
-Require `attr_bool/core_ext` to monkey-patch `Module` & `Class` (not recommended for libraries):
+Require `attr_bool/core_ext` to extend the core (monkey-patch) `Module` & `Class` (not recommended for libraries):
 
 ```Ruby
 require 'attr_bool/core_ext'
@@ -476,7 +476,7 @@ To run these on your system:
 $ bundle exec rake benchmark
 ```
 
-## License [^](#contents)
+## [//](#contents) License
 
 [MIT](LICENSE.txt)
 

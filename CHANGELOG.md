@@ -30,23 +30,23 @@ require 'attr_bool/core_ext'
 ### Added
 - AttrBool::Ext
     - Was previously inside of *AttrBool*
-- lib/core_ext.rb
+- lib/attr_bool/core_ext.rb
     - Was previously inside of *lib/attr_bool.rb*
 - test/TestHelper
 - test/CoreExtTest
 - .yardopts
 
 ### Changed
-- test/AttrBoolTest
-    - Updated to use new code
-- README.md
-    - Updated to use new code
-    - Added more Similar Projects from [The Ruby Toolbox](https://www.ruby-toolbox.com/search?q=attr+bool)
-    - Formatted for new README style
 - attr_bool.gemspec
     - Added *rdoc* & *redcarpet* dev deps for YARDoc
     - Added *rdoc* files & opts
     - Formatted for new Gemspec style
+- README.md
+    - Updated to use new code
+    - Added more Similar Projects from [The Ruby Toolbox](https://www.ruby-toolbox.com/search?q=attr+bool)
+    - Formatted for new README style
+- test/AttrBoolTest
+    - Updated to use new code
 
 ## [v0.1.0] - [2020-04-20](https://github.com/esotericpig/attr_bool/tree/v0.1.0)
 

@@ -21,9 +21,9 @@ module AttrBool
   # @author Jonathan Bradley Whited (@esotericpig)
   # @since  0.2.0
   ###
-  module Ext
+  module CoreExt
   end
 end
 
 # This works for both +class+ & +module+ because +class+ extends +module+.
-Module.prepend AttrBool::Able
+Module.prepend AttrBool::Ext

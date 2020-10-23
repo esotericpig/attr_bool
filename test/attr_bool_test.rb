@@ -14,110 +14,15 @@
 #++
 
 
-require 'minitest/autorun'
+require 'test_helper'
 
 require 'attr_bool'
 
 ###
-# Test +doc_*+ vars with:
-#   $ bundle exec rake doc_test
-#   $ xdg-open doc/TestBag.html
-# 
 # @author Jonathan Bradley Whited (@esotericpig)
 # @since  0.1.0
 ###
-class TestBag
-  attr_accessor :hidden
-  
-  def initialize()
-    @hidden = 0
-    
-    @acc = nil
-    @acc5 = nil
-    @acc6 = nil
-    @acc15 = nil
-    @acc16 = nil
-    @acc17 = nil
-  end
-  
-  attr_accessor? :doc_acc    # @!macro attach attr_accessor?
-  attr_reader?   :doc_read   # @!macro attach attr_reader?
-  attr_writer?   :doc_write  # @!macro attach attr_writer?
-  attr_bool      :doc_bool   # @!macro attach attr_bool
-  attr_bool?     :doc_boolq  # @!macro attach attr_bool?
-  attr_booler    :doc_booler # @!macro attach attr_booler
-  attr_boolor    :doc_boolor # @!macro attach attr_boolor
-  
-  attr_accessor? :acc
-  attr_accessor? :acc1,1
-  attr_accessor? :acc2,default: 2
-  attr_accessor?(:acc3,
-    reader: lambda { @acc3.odd?() },
-    writer: lambda {|value| @acc3 = value + 1}
-  )
-  attr_accessor?(:acc4) do |value=nil|
-    @acc4 = value + 1 unless value.nil?()
-    @acc4.odd?()
-  end
-  
-  attr_accessor? :acc5 ,:acc6
-  attr_accessor? :acc7 ,:acc8,78
-  attr_accessor? :acc9 ,:acc10,default: 910
-  attr_accessor?(:acc11,:acc12,
-    reader: lambda { @hidden.odd?() },
-    writer: lambda {|value| @hidden = value + 1}
-  )
-  attr_accessor?(:acc13,:acc14) do |value=nil|
-    @hidden = value + 1 unless value.nil?()
-    @hidden.odd?()
-  end
-  
-  attr_accessor? 'acc15'
-  attr_accessor? 'acc16','acc17'
-  attr_accessor? 'acc18',default: 'str'
-  attr_accessor? 'acc19','acc20',default: 'str'
-  attr_accessor? 'acc21',default: :sym
-  attr_accessor? 'acc22','acc23',default: :sym
-  
-  attr_bool :boo
-  attr_bool :boo1,1
-  attr_bool :boo2,default: 2
-  attr_bool(:boo3,
-    reader: lambda { @boo3.odd?() },
-    writer: lambda {|value| @boo3 = value + 1}
-  )
-  attr_bool(:boo4) do |value=nil|
-    @boo4 = value + 1 unless value.nil?()
-    @boo4.odd?()
-  end
-  
-  attr_bool :boo5 ,:boo6
-  attr_bool :boo7 ,:boo8,78
-  attr_bool :boo9 ,:boo10,default: 910
-  attr_bool(:boo11,:boo12,
-    reader: lambda { @hidden.odd?() },
-    writer: lambda {|value| @hidden = value + 1}
-  )
-  attr_bool(:boo13,:boo14) do |value=nil|
-    @hidden = value + 1 unless value.nil?()
-    @hidden.odd?()
-  end
-  
-  attr_bool 'boo15'
-  attr_bool 'boo16','boo17'
-  attr_bool 'boo18',default: 'str'
-  attr_bool 'boo19','boo20',default: 'str'
-  attr_bool 'boo21',default: :sym
-  attr_bool 'boo22','boo23',default: :sym
-  
-  attr_boolor :bor
-end
-
-###
-# @author Jonathan Bradley Whited (@esotericpig)
-# @since  0.1.0
-###
-class AttrBoolTest < Minitest::Test
+class AttrBoolTest < TestHelper
   def setup()
     @bag = TestBag.new()
   end
@@ -241,5 +146,98 @@ class AttrBoolTest < Minitest::Test
   def test_attr_boolor()
     @bag.bor = true
     assert_equal true,@bag.bor?()
+  end
+  
+  ###
+  # @author Jonathan Bradley Whited (@esotericpig)
+  # @since  0.2.0
+  ###
+  class TestBag
+    extend AttrBool::Ext
+    
+    attr_accessor :hidden
+    
+    def initialize()
+      @hidden = 0
+      
+      @acc = nil
+      @acc5 = nil
+      @acc6 = nil
+      @acc15 = nil
+      @acc16 = nil
+      @acc17 = nil
+    end
+    
+    attr_accessor? :doc_acc
+    attr_reader?   :doc_read
+    attr_writer?   :doc_write
+    attr_bool      :doc_bool
+    attr_bool?     :doc_boolq
+    attr_booler    :doc_booler
+    attr_boolor    :doc_boolor
+    
+    attr_accessor? :acc
+    attr_accessor? :acc1,1
+    attr_accessor? :acc2,default: 2
+    attr_accessor?(:acc3,
+      reader: lambda { @acc3.odd?() },
+      writer: lambda {|value| @acc3 = value + 1}
+    )
+    attr_accessor?(:acc4) do |value=nil|
+      @acc4 = value + 1 unless value.nil?()
+      @acc4.odd?()
+    end
+    
+    attr_accessor? :acc5 ,:acc6
+    attr_accessor? :acc7 ,:acc8,78
+    attr_accessor? :acc9 ,:acc10,default: 910
+    attr_accessor?(:acc11,:acc12,
+      reader: lambda { @hidden.odd?() },
+      writer: lambda {|value| @hidden = value + 1}
+    )
+    attr_accessor?(:acc13,:acc14) do |value=nil|
+      @hidden = value + 1 unless value.nil?()
+      @hidden.odd?()
+    end
+    
+    attr_accessor? 'acc15'
+    attr_accessor? 'acc16','acc17'
+    attr_accessor? 'acc18',default: 'str'
+    attr_accessor? 'acc19','acc20',default: 'str'
+    attr_accessor? 'acc21',default: :sym
+    attr_accessor? 'acc22','acc23',default: :sym
+    
+    attr_bool :boo
+    attr_bool :boo1,1
+    attr_bool :boo2,default: 2
+    attr_bool(:boo3,
+      reader: lambda { @boo3.odd?() },
+      writer: lambda {|value| @boo3 = value + 1}
+    )
+    attr_bool(:boo4) do |value=nil|
+      @boo4 = value + 1 unless value.nil?()
+      @boo4.odd?()
+    end
+    
+    attr_bool :boo5 ,:boo6
+    attr_bool :boo7 ,:boo8,78
+    attr_bool :boo9 ,:boo10,default: 910
+    attr_bool(:boo11,:boo12,
+      reader: lambda { @hidden.odd?() },
+      writer: lambda {|value| @hidden = value + 1}
+    )
+    attr_bool(:boo13,:boo14) do |value=nil|
+      @hidden = value + 1 unless value.nil?()
+      @hidden.odd?()
+    end
+    
+    attr_bool 'boo15'
+    attr_bool 'boo16','boo17'
+    attr_bool 'boo18',default: 'str'
+    attr_bool 'boo19','boo20',default: 'str'
+    attr_bool 'boo21',default: :sym
+    attr_bool 'boo22','boo23',default: :sym
+    
+    attr_boolor :bor
   end
 end

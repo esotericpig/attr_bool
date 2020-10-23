@@ -168,14 +168,6 @@ class AttrBoolTest < TestHelper
       @acc17 = nil
     end
     
-    attr_accessor? :doc_acc
-    attr_reader?   :doc_read
-    attr_writer?   :doc_write
-    attr_bool      :doc_bool
-    attr_bool?     :doc_boolq
-    attr_booler    :doc_booler
-    attr_boolor    :doc_boolor
-    
     attr_accessor? :acc
     attr_accessor? :acc1,1
     attr_accessor? :acc2,default: 2

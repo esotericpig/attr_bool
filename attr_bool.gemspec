@@ -23,9 +23,14 @@ Gem::Specification.new() do |spec|
   spec.licenses    = ['MIT']
   spec.homepage    = 'https://github.com/esotericpig/attr_bool'
   spec.summary     = 'Finally attr_accessor & attr_reader with question marks for booleans!?'
-  spec.description = spec.summary +
-    ' Simply use one of the following: attr_accessor?, attr_reader?, attr_bool, attr_bool?.' \
-    ' Default values can also be passed in.'
+  spec.description = <<-EOD.gsub(/\s+/,' ').strip()
+    #{spec.summary}
+    Simply use: attr_accessor?, attr_reader?, attr_bool, attr_bool?.
+    Default values can also be passed in as the last argument
+      or with the 'default: ' keyword argument.
+    In a Module/Class, extend 'AttrBool::Ext',
+      or in the file, require 'attr_bool/core_ext'.
+  EOD
   
   spec.metadata = {
     'homepage_uri'    => 'https://github.com/esotericpig/attr_bool',

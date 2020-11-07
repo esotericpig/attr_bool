@@ -485,7 +485,7 @@ $ bundle exec rake benchmark
 
 [MIT](LICENSE.txt)
 
-> AttrBool (https://github.com/esotericpig/attr_bool)
+> AttrBool (https://github.com/esotericpig/attr_bool)  
 > Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)  
 > 
 > Permission is hereby granted, free of charge, to any person obtaining a copy  

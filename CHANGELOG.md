@@ -2,17 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0/),
+Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0),
 and this project adheres to [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html).
 
-## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.2.1...HEAD)
-
+## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.2.2...HEAD)
 -
 
-## [v0.2.1] - [2020-11-07](https://github.com/esotericpig/attr_bool/compare/v0.2.0...v0.2.1)
 
+## [v0.2.2] - [2021-06-17](https://github.com/esotericpig/attr_bool/compare/v0.2.1...v0.2.2)
+### Changed
+- Formatted code with RuboCop.
+
+
+## [v0.2.1] - [2020-11-07](https://github.com/esotericpig/attr_bool/compare/v0.2.0...v0.2.1)
 ### Changed
 - Minor changes to *README* and *Gemspec* description
+
 
 ## [v0.2.0] - [2020-10-23](https://github.com/esotericpig/attr_bool/compare/v0.1.0...v0.2.0)
 
@@ -52,6 +57,7 @@ require 'attr_bool/core_ext'
     - Formatted for new README style
 - test/AttrBoolTest
     - Updated to use new code
+
 
 ## [v0.1.0] - [2020-04-20](https://github.com/esotericpig/attr_bool/tree/v0.1.0)
 

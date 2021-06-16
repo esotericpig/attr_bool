@@ -4,13 +4,9 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)
-# 
-# AttrBool is free software: you can redistribute it and/or modify it under
-# the terms of the MIT License.
-# 
-# You should have received a copy of the MIT License along with AttrBool.
-# If not, see <https://choosealicense.com/licenses/mit/>.
+# Copyright (c) 2020-2021 Jonathan Bradley Whited
+#
+# SPDX-License-Identifier: MIT
 #++
 
 
@@ -19,30 +15,30 @@ require 'test_helper'
 require 'attr_bool/core_ext'
 
 ###
-# @author Jonathan Bradley Whited (@esotericpig)
+# @author Jonathan Bradley Whited
 # @since  0.2.0
 ###
 class CoreExtTest < TestHelper
   def setup()
     @bag = TestBag.new()
   end
-  
+
   def test_core_ext()
     @bag.acc    = true
     @bag.write  = true
     @bag.bool   = true
     @bag.booler = true
     @bag.boolor = true
-    
+
     assert_equal true ,@bag.acc?()
     assert_nil   @bag.read?()
     assert_equal true ,@bag.bool?()
     assert_equal false,@bag.boolq?()
     assert_equal true ,@bag.boolor?()
   end
-  
+
   ###
-  # @author Jonathan Bradley Whited (@esotericpig)
+  # @author Jonathan Bradley Whited
   # @since  0.2.0
   ###
   class TestBag

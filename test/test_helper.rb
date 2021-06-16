@@ -4,20 +4,16 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)
-# 
-# AttrBool is free software: you can redistribute it and/or modify it under
-# the terms of the MIT License.
-# 
-# You should have received a copy of the MIT License along with AttrBool.
-# If not, see <https://choosealicense.com/licenses/mit/>.
+# Copyright (c) 2020-2021 Jonathan Bradley Whited
+#
+# SPDX-License-Identifier: MIT
 #++
 
 
 require 'minitest/autorun'
 
 ###
-# @author Jonathan Bradley Whited (@esotericpig)
+# @author Jonathan Bradley Whited
 # @since  0.2.0
 ###
 class TestHelper < Minitest::Test

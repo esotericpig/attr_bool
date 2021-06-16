@@ -4,13 +4,9 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)
-# 
-# AttrBool is free software: you can redistribute it and/or modify it under
-# the terms of the MIT License.
-# 
-# You should have received a copy of the MIT License along with AttrBool.
-# If not, see <https://choosealicense.com/licenses/mit/>.
+# Copyright (c) 2020-2021 Jonathan Bradley Whited
+#
+# SPDX-License-Identifier: MIT
 #++
 
 
@@ -19,47 +15,47 @@ require 'test_helper'
 require 'attr_bool'
 
 ###
-# @author Jonathan Bradley Whited (@esotericpig)
+# @author Jonathan Bradley Whited
 # @since  0.1.0
 ###
 class AttrBoolTest < TestHelper
   def setup()
     @bag = TestBag.new()
   end
-  
+
   def test_attr_accessor()
     assert_nil @bag.acc?()
     @bag.acc = true
     assert_equal true,@bag.acc?()
-    
+
     assert_equal 1,@bag.acc1?()
     assert_equal 2,@bag.acc2?()
-    
+
     @bag.acc3 = 0
     assert_equal true,@bag.acc3?()
-    
+
     @bag.acc4 = 0
     assert_equal true,@bag.acc4?()
-    
+
     assert_nil @bag.acc5?()
     assert_nil @bag.acc6?()
     @bag.acc5 = @bag.acc6 = true
     assert_equal true,@bag.acc5?()
     assert_equal true,@bag.acc6?()
-    
+
     assert_equal 78,@bag.acc7?()
     assert_equal 78,@bag.acc8?()
     assert_equal 910,@bag.acc9?()
     assert_equal 910,@bag.acc10?()
-    
+
     @bag.acc11 = @bag.acc12 = 0
     assert_equal true,@bag.acc11?()
     assert_equal true,@bag.acc12?()
-    
+
     @bag.acc13 = @bag.acc14 = 0
     assert_equal true,@bag.acc13?()
     assert_equal true,@bag.acc14?()
-    
+
     assert_nil @bag.acc15?()
     assert_nil @bag.acc16?()
     assert_nil @bag.acc17?()
@@ -67,7 +63,7 @@ class AttrBoolTest < TestHelper
     assert_equal true,@bag.acc15?()
     assert_equal true,@bag.acc16?()
     assert_equal true,@bag.acc17?()
-    
+
     assert_equal 'str',@bag.acc18?()
     assert_equal 'str',@bag.acc19?()
     assert_equal 'str',@bag.acc20?()
@@ -75,7 +71,7 @@ class AttrBoolTest < TestHelper
     assert_equal true,@bag.acc18?()
     assert_equal true,@bag.acc19?()
     assert_equal true,@bag.acc20?()
-    
+
     assert_equal :sym,@bag.acc21?()
     assert_equal :sym,@bag.acc22?()
     assert_equal :sym,@bag.acc23?()
@@ -84,40 +80,40 @@ class AttrBoolTest < TestHelper
     assert_equal true,@bag.acc22?()
     assert_equal true,@bag.acc23?()
   end
-  
+
   def test_attr_bool()
     assert_equal false,@bag.boo?()
     @bag.boo = true
     assert_equal true,@bag.boo?()
-    
+
     assert_equal true,@bag.boo1?()
     assert_equal true,@bag.boo2?()
-    
+
     @bag.boo3 = 0
     assert_equal true,@bag.boo3?()
-    
+
     @bag.boo4 = 0
     assert_equal true,@bag.boo4?()
-    
+
     assert_equal false,@bag.boo5?()
     assert_equal false,@bag.boo6?()
     @bag.boo5 = @bag.boo6 = true
     assert_equal true,@bag.boo5?()
     assert_equal true,@bag.boo6?()
-    
+
     assert_equal true,@bag.boo7?()
     assert_equal true,@bag.boo8?()
     assert_equal true,@bag.boo9?()
     assert_equal true,@bag.boo10?()
-    
+
     @bag.boo11 = @bag.boo12 = 0
     assert_equal true,@bag.boo11?()
     assert_equal true,@bag.boo12?()
-    
+
     @bag.boo13 = @bag.boo14 = 0
     assert_equal true,@bag.boo13?()
     assert_equal true,@bag.boo14?()
-    
+
     assert_equal false,@bag.boo15?()
     assert_equal false,@bag.boo16?()
     assert_equal false,@bag.boo17?()
@@ -125,7 +121,7 @@ class AttrBoolTest < TestHelper
     assert_equal true,@bag.boo15?()
     assert_equal true,@bag.boo16?()
     assert_equal true,@bag.boo17?()
-    
+
     assert_equal true,@bag.boo18?()
     assert_equal true,@bag.boo19?()
     assert_equal true,@bag.boo20?()
@@ -133,7 +129,7 @@ class AttrBoolTest < TestHelper
     assert_equal false,@bag.boo18?()
     assert_equal false,@bag.boo19?()
     assert_equal false,@bag.boo20?()
-    
+
     assert_equal true,@bag.boo21?()
     assert_equal true,@bag.boo22?()
     assert_equal true,@bag.boo23?()
@@ -142,24 +138,24 @@ class AttrBoolTest < TestHelper
     assert_equal false,@bag.boo22?()
     assert_equal false,@bag.boo23?()
   end
-  
+
   def test_attr_boolor()
     @bag.bor = true
     assert_equal true,@bag.bor?()
   end
-  
+
   ###
-  # @author Jonathan Bradley Whited (@esotericpig)
+  # @author Jonathan Bradley Whited
   # @since  0.2.0
   ###
   class TestBag
     extend AttrBool::Ext
-    
+
     attr_accessor :hidden
-    
+
     def initialize()
       @hidden = 0
-      
+
       @acc = nil
       @acc5 = nil
       @acc6 = nil
@@ -167,7 +163,7 @@ class AttrBoolTest < TestHelper
       @acc16 = nil
       @acc17 = nil
     end
-    
+
     attr_accessor? :acc
     attr_accessor? :acc1,1
     attr_accessor? :acc2,default: 2
@@ -179,7 +175,7 @@ class AttrBoolTest < TestHelper
       @acc4 = value + 1 unless value.nil?()
       @acc4.odd?()
     end
-    
+
     attr_accessor? :acc5 ,:acc6
     attr_accessor? :acc7 ,:acc8,78
     attr_accessor? :acc9 ,:acc10,default: 910
@@ -191,14 +187,14 @@ class AttrBoolTest < TestHelper
       @hidden = value + 1 unless value.nil?()
       @hidden.odd?()
     end
-    
+
     attr_accessor? 'acc15'
     attr_accessor? 'acc16','acc17'
     attr_accessor? 'acc18',default: 'str'
     attr_accessor? 'acc19','acc20',default: 'str'
     attr_accessor? 'acc21',default: :sym
     attr_accessor? 'acc22','acc23',default: :sym
-    
+
     attr_bool :boo
     attr_bool :boo1,1
     attr_bool :boo2,default: 2
@@ -210,7 +206,7 @@ class AttrBoolTest < TestHelper
       @boo4 = value + 1 unless value.nil?()
       @boo4.odd?()
     end
-    
+
     attr_bool :boo5 ,:boo6
     attr_bool :boo7 ,:boo8,78
     attr_bool :boo9 ,:boo10,default: 910
@@ -222,14 +218,14 @@ class AttrBoolTest < TestHelper
       @hidden = value + 1 unless value.nil?()
       @hidden.odd?()
     end
-    
+
     attr_bool 'boo15'
     attr_bool 'boo16','boo17'
     attr_bool 'boo18',default: 'str'
     attr_bool 'boo19','boo20',default: 'str'
     attr_bool 'boo21',default: :sym
     attr_bool 'boo22','boo23',default: :sym
-    
+
     attr_boolor :bor
   end
 end

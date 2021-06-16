@@ -14,7 +14,7 @@ require 'attr_bool'
 
 module Wearable
   extend AttrBool::Ext
-  
+
   attr_accessor? :in_fashion
   attr_reader?   :can_wash
 end
@@ -22,7 +22,7 @@ end
 class BananaHammock
   extend AttrBool::Ext
   include Wearable
-  
+
   # Enforce boolean (true or false) values.
   attr_bool  :princess
   attr_bool? :crap_bag
@@ -72,6 +72,7 @@ Create an [issue](https://github.com/esotericpig/attr_bool/issues) to add your p
 | [attr_asker](https://rubygems.org/gems/attr_asker) | [[GitHub]](https://github.com/kitlangton/attr_asker) | `attr_asker :running` |
 | [attr_boolean](https://rubygems.org/gems/attr_boolean) | [[GitHub]](https://github.com/talentnest/attr_boolean) | `attr_boolean :running, default: true` |
 | [attr_setting](https://rubygems.org/gems/attr_setting) | [[GitHub]](https://github.com/merhard/attr_setting) | `attr_setting :running, true` |
+| [attribool](https://rubygems.org/gems/attribool) | [[GitHub]](https://github.com/evanthegrayt/attribool) | `bool_reader :name` |
 | [attribute_boolean](https://rubygems.org/gems/attribute_boolean) | [[GitHub]](https://github.com/alexmchale/attribute_boolean) | `attr_boolean :running` |
 | [boolean_accessor](https://rubygems.org/gems/boolean_accessor) | [[GitHub]](https://github.com/hiroki23/boolean_accessor) | `battr_accessor :running` |
 | [named_accessors](https://rubygems.org/gems/named_accessors) | [[GitHub]](https://github.com/zlw/named_accessors) | `named_reader :running, as: :running?` |
@@ -115,7 +116,7 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_accessor? :running
   attr_reader?   :winning
 end
@@ -143,10 +144,10 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_accessor? :running,'looper'
   attr_reader?   :fps,'music'
-  
+
   def initialize()
     @running = false
     @looper  = nil
@@ -186,17 +187,17 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_bool   :running,'looper'
   attr_bool?  :fps,'music'
   attr_booler :sound
-  
+
   def initialize()
     @fps   = 60
     @music = 'Beatles'
     @sound = false
   end
-  
+
   def loud?()
     music? && @sound == true
   end
@@ -234,10 +235,10 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_accessor? :running,:looper,false
   attr_reader?   :min_fps,:max_fps,60
-  
+
   attr_bool  :gravity,:wind,true
   attr_bool? :min_force,:max_force,110
 end
@@ -261,7 +262,7 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_accessor? :running,:looper,default: :main
   attr_reader?   :music,:sound,default: 'quiet!'
 end
@@ -287,10 +288,10 @@ require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
-  
+
   attr_reader?(:lag)  { print @ping,','; @ping > 300 }
   attr_writer?(:ping) {|value| @ping = value.to_i() }
-  
+
   # Define 1 block for both reader & writer together.
   attr_accessor?(:sound) do |value=nil|
     if value.nil? # Assume reader
@@ -300,16 +301,16 @@ class Game
       @sound = value.to_i() % 100
     end
   end
-  
+
   attr_bool?(:slow) { print @fps,','; @fps < 30 }
   attr_booler(:fps) {|value| @fps = value.to_i() }
-  
+
   # Define separate blocks.
   attr_bool(:music,
     reader: -> { print @music,','; !@music.nil? },
     writer: ->(value) { @music = value.to_sym() }
   )
-  
+
   # Define only 1 block.
   attr_accessor?(:frames,
     reader: -> { @frames.odd? }
@@ -344,13 +345,13 @@ end
 
 class BananaHammock
   include Wearable
-  
+
   # +attr_bool*+ enforce boolean (true or false) values.
   attr_bool   :princess,:prince,default: 'Consuela'
   attr_bool?  :can_swim,:can_wink,true
   attr_bool? (:crap_bag) { princess? && can_swim? }
   attr_booler :friends
-  
+
   def for_friends()
     @friends
   end
@@ -486,7 +487,7 @@ $ bundle exec rake benchmark
 [MIT](LICENSE.txt)
 
 > AttrBool (https://github.com/esotericpig/attr_bool)  
-> Copyright (c) 2020 Jonathan Bradley Whited (@esotericpig)  
+> Copyright (c) 2020-2021 Jonathan Bradley Whited  
 > 
 > Permission is hereby granted, free of charge, to any person obtaining a copy  
 > of this software and associated documentation files (the "Software"), to deal  

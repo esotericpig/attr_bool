@@ -1,7 +1,6 @@
 # AttrBool
 
 [![Gem Version](https://badge.fury.io/rb/attr_bool.svg)](https://badge.fury.io/rb/attr_bool)
-[![Build Status](https://travis-ci.org/esotericpig/attr_bool.svg?branch=master)](https://travis-ci.org/esotericpig/attr_bool)
 
 [![Source Code](https://img.shields.io/badge/source-github-%23211F1F.svg)](https://github.com/esotericpig/attr_bool)
 [![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg)](CHANGELOG.md)

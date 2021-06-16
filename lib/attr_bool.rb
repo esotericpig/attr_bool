@@ -31,15 +31,15 @@ module AttrBool
   module Ext
     def attr_accessor?(*var_ids,default: nil,reader: nil,writer: nil,&block)
       if block
-        reader = block if reader.nil?()
-        writer = block if writer.nil?()
+        reader = block if reader.nil?
+        writer = block if writer.nil?
       end
 
-      if default.nil?() && reader.nil?()
+      if default.nil? && reader.nil?
         last = var_ids[-1]
 
         if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop()
+          default = var_ids.pop
         end
       end
 
@@ -48,18 +48,18 @@ module AttrBool
     end
 
     def attr_reader?(*var_ids,default: nil,&block)
-      no_default = (default.nil?() && !block)
+      no_default = (default.nil? && !block)
 
       if no_default
         last = var_ids[-1]
 
         if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop()
+          default = var_ids.pop
           no_default = false
         end
       end
 
-      var_ids.each() do |var_id|
+      var_ids.each do |var_id|
         var_id_q = :"#{var_id}?"
 
         if no_default
@@ -83,7 +83,7 @@ module AttrBool
     # This should only be used when you want to pass in a block/proc.
     def attr_writer?(*var_ids,&block)
       if block
-        var_ids.each() do |var_id|
+        var_ids.each do |var_id|
           define_method(:"#{var_id}=",&block)
         end
       else
@@ -99,15 +99,15 @@ module AttrBool
 
     def attr_bool(*var_ids,default: nil,reader: nil,writer: nil,&block)
       if block
-        reader = block if reader.nil?()
-        writer = block if writer.nil?()
+        reader = block if reader.nil?
+        writer = block if writer.nil?
       end
 
-      if default.nil?() && reader.nil?()
+      if default.nil? && reader.nil?
         last = var_ids[-1]
 
         if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop()
+          default = var_ids.pop
         end
       end
 
@@ -117,7 +117,7 @@ module AttrBool
     alias_method :attr_boolor,:attr_bool
 
     def attr_bool?(*var_ids,default: nil,&block)
-      no_default = default.nil?()
+      no_default = default.nil?
 
       if no_default
         no_default = !block
@@ -126,7 +126,7 @@ module AttrBool
           last = var_ids[-1]
 
           if !last.is_a?(String) && !last.is_a?(Symbol)
-            default = var_ids.pop() ? true : false
+            default = var_ids.pop ? true : false
             no_default = false
           end
         end
@@ -134,7 +134,7 @@ module AttrBool
         default = default ? true : false
       end
 
-      var_ids.each() do |var_id|
+      var_ids.each do |var_id|
         var_id_q = :"#{var_id}?"
 
         if no_default
@@ -168,7 +168,7 @@ module AttrBool
         end
       end
 
-      var_ids.each() do |var_id|
+      var_ids.each do |var_id|
         var_id_eq = :"#{var_id}="
 
         if block

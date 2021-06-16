@@ -4,7 +4,7 @@
 
 require_relative 'lib/attr_bool/version'
 
-Gem::Specification.new() do |spec|
+Gem::Specification.new do |spec|
   spec.name        = 'attr_bool'
   spec.version     = AttrBool::VERSION
   spec.authors     = ['Jonathan Bradley Whited']
@@ -12,14 +12,14 @@ Gem::Specification.new() do |spec|
   spec.licenses    = ['MIT']
   spec.homepage    = 'https://github.com/esotericpig/attr_bool'
   spec.summary     = 'Finally attr_accessor & attr_reader with question marks for booleans!?'
-  spec.description = <<-EOD.gsub(/\s+/,' ').strip()
+  spec.description = <<-DESC.gsub(/\s+/,' ').strip
     #{spec.summary}
     Simply use: attr_accessor?, attr_reader?, attr_bool, attr_bool?.
     Default values can also be passed in as the last argument
       or with the 'default: ' keyword argument.
     In a Module/Class, extend 'AttrBool::Ext',
       or in the file, require 'attr_bool/core_ext'.
-  EOD
+  DESC
 
   spec.metadata = {
     'homepage_uri'    => 'https://github.com/esotericpig/attr_bool',
@@ -35,7 +35,7 @@ Gem::Specification.new() do |spec|
     Dir.glob(File.join("{#{spec.require_paths.join(',')}}",'**','*.{erb,rb}')),
     %W[ Gemfile #{spec.name}.gemspec Rakefile ],
     %w[ LICENSE.txt ],
-  ].flatten()
+  ].flatten
 
   spec.add_development_dependency 'bundler'   ,'~> 2.1'
   spec.add_development_dependency 'minitest'  ,'~> 5.14'

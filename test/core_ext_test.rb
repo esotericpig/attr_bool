@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # encoding: UTF-8
 # frozen_string_literal: true
 
@@ -19,22 +18,22 @@ require 'attr_bool/core_ext'
 # @since  0.2.0
 ###
 class CoreExtTest < TestHelper
-  def setup()
-    @bag = TestBag.new()
+  def setup
+    @bag = TestBag.new
   end
 
-  def test_core_ext()
+  def test_core_ext
     @bag.acc    = true
     @bag.write  = true
     @bag.bool   = true
     @bag.booler = true
     @bag.boolor = true
 
-    assert_equal true ,@bag.acc?()
-    assert_nil   @bag.read?()
-    assert_equal true ,@bag.bool?()
-    assert_equal false,@bag.boolq?()
-    assert_equal true ,@bag.boolor?()
+    assert_equal true ,@bag.acc?
+    assert_nil   @bag.read?
+    assert_equal true ,@bag.bool?
+    assert_equal false,@bag.boolq?
+    assert_equal true ,@bag.boolor?
   end
 
   ###

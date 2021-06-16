@@ -17,7 +17,8 @@ CLOBBER.include('doc/')
 task default: [:test]
 
 desc 'Generate doc'
-task :doc => [:yard] do |task|
+task :doc,%i[] => %i[yard] do |task|
+  # pass
 end
 
 desc 'Generate doc for tests too'
@@ -26,11 +27,11 @@ task :doc_test do |task|
 
   doc_task = Rake::Task[:doc]
 
-  doc_task.reenable()
-  doc_task.invoke()
+  doc_task.reenable
+  doc_task.invoke
 end
 
-Rake::TestTask.new() do |task|
+Rake::TestTask.new do |task|
   task.deps << :doc_test
   task.libs = ['lib','test']
   task.pattern = File.join('test','**','*_test.rb')
@@ -39,19 +40,21 @@ Rake::TestTask.new() do |task|
   task.warning = true
 end
 
-YARD::Rake::YardocTask.new() do |task|
+YARD::Rake::YardocTask.new do |task|
   task.files = [File.join('lib','**','*.{rb}')]
 
   #task.options += ['--template-path',File.join('yard','templates')]
   task.options += ['--title',"AttrBool v#{AttrBool::VERSION} doc"]
 
-  task.before = Proc.new() do
-    task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s().casecmp?('y')
+  task.before = proc do
+    task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s.casecmp?('y')
   end
 end
 
 desc 'Benchmark define_method vs module_eval and ?: vs bangbang'
 task :benchmark do |task|
+  # rubocop:disable all
+
   N0 = 100_000
   N1 = 20_000_000
 
@@ -86,7 +89,7 @@ task :benchmark do |task|
   Module.prepend ModuleExt
 
   puts
-  Benchmark.bmbm() do |bm|
+  Benchmark.bmbm do |bm|
     bm.report('class_eval   ') do
       class ClassEvalTest
         do_class_eval :ce
@@ -109,7 +112,7 @@ task :benchmark do |task|
   str = 'str' # Warning workaround
 
   puts
-  Benchmark.bmbm() do |bm|
+  Benchmark.bmbm do |bm|
     bm.report('?:') do
       0.upto(N1) do |i|
         x = str   ? true : false
@@ -132,4 +135,6 @@ task :benchmark do |task|
   end
 
   puts
+
+  # rubocop:enable all
 end

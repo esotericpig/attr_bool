@@ -37,10 +37,10 @@ Gem::Specification.new do |spec|
     %w[ LICENSE.txt ],
   ].flatten
 
-  spec.add_development_dependency 'bundler'   ,'~> 2.1'
+  spec.add_development_dependency 'bundler'   ,'~> 2.2'
   spec.add_development_dependency 'minitest'  ,'~> 5.14'
   spec.add_development_dependency 'rake'      ,'~> 13.0'
-  spec.add_development_dependency 'rdoc'      ,'~> 6.2'   # YARDoc RDoc (*.rb)
+  spec.add_development_dependency 'rdoc'      ,'~> 6.3'   # YARDoc RDoc (*.rb)
   spec.add_development_dependency 'redcarpet' ,'~> 3.5'   # YARDoc Markdown (*.md)
   spec.add_development_dependency 'yard'      ,'~> 0.9'   # Doc
 

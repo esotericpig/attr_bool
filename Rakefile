@@ -1,58 +1,33 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-
 require 'bundler/gem_tasks'
 
+require 'attr_bool/version'
 require 'benchmark'
 require 'rake/clean'
 require 'rake/testtask'
-require 'yard'
+require 'rdoc/task'
 
-require 'attr_bool/version'
-
-CLEAN.exclude('{.git,stock}/**/*')
+CLEAN.exclude('{.git,.github,.idea,stock}/**/*')
 CLOBBER.include('doc/')
 
 task default: [:test]
 
-desc 'Generate doc'
-task :doc,%i[] => %i[yard] do |task|
-  # pass
-end
-
-desc 'Generate doc for tests too'
-task :doc_test do |task|
-  ENV['doctest'] = 'y'
-
-  doc_task = Rake::Task[:doc]
-
-  doc_task.reenable
-  doc_task.invoke
-end
-
 Rake::TestTask.new do |task|
-  task.deps << :doc_test
   task.libs = ['lib','test']
-  task.pattern = File.join('test','**','*_test.rb')
-  task.description += ": '#{task.pattern}'"
-  task.verbose = false
+  task.pattern = 'test/**/*_test.rb'
   task.warning = true
+  task.verbose = false
 end
 
-YARD::Rake::YardocTask.new do |task|
-  task.files = [File.join('lib','**','*.{rb}')]
-
-  #task.options += ['--template-path',File.join('yard','templates')]
-  task.options += ['--title',"AttrBool v#{AttrBool::VERSION} doc"]
-
-  task.before = proc do
-    task.files << File.join('test','**','*.{rb}') if ENV['doctest'].to_s.casecmp?('y')
-  end
+RDoc::Task.new(:doc) do |task|
+  task.rdoc_dir = 'doc'
+  task.title = "AttrBool v#{AttrBool::VERSION}"
 end
 
 desc 'Benchmark define_method vs module_eval and ?: vs bangbang'
-task :benchmark do |task|
+task :benchmark do |_task|
   # rubocop:disable all
 
   N0 = 100_000

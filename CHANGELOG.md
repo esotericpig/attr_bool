@@ -1,29 +1,23 @@
 # Changelog | AttrBool
 
-All notable changes to this project will be documented in this file.
-
-Format is based on [Keep a Changelog v1.0.0](https://keepachangelog.com/en/1.0.0),
-and this project adheres to [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html).
+- [Keep a Changelog](https://keepachangelog.com/en/1.1.0)
+- [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.2.2...HEAD)
--
+- ...
 
-
-## [v0.2.2] - [2021-06-17](https://github.com/esotericpig/attr_bool/compare/v0.2.1...v0.2.2)
+## [0.2.2](https://github.com/esotericpig/attr_bool/compare/v0.2.1...v0.2.2) - 2021-06-17
 ### Changed
 - Formatted code with RuboCop.
 
-
-## [v0.2.1] - [2020-11-07](https://github.com/esotericpig/attr_bool/compare/v0.2.0...v0.2.1)
+## [0.2.1](https://github.com/esotericpig/attr_bool/compare/v0.2.0...v0.2.1) - 2020-11-07
 ### Changed
 - Minor changes to *README* and *Gemspec* description
 
-
-## [v0.2.0] - [2020-10-23](https://github.com/esotericpig/attr_bool/compare/v0.1.0...v0.2.0)
-
+## [0.2.0](https://github.com/esotericpig/attr_bool/compare/v0.1.0...v0.2.0) - 2020-10-23
 A major departure from the previous version by not extending the core (monkey-patching) `Module` by default.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class BananaHammock
@@ -33,7 +27,7 @@ end
 
 To imitate the previous version:
 
-```Ruby
+```ruby
 require 'attr_bool/core_ext'
 ```
 
@@ -58,14 +52,5 @@ require 'attr_bool/core_ext'
 - test/AttrBoolTest
     - Updated to use new code
 
-
-## [v0.1.0] - [2020-04-20](https://github.com/esotericpig/attr_bool/tree/v0.1.0)
-
-Initial working version.
-
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
+## [0.1.0](https://github.com/esotericpig/attr_bool/tree/v0.1.0) - 2020-04-20
+Initial release.

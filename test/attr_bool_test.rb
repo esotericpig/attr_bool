@@ -3,20 +3,15 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020-2021 Jonathan Bradley Whited
+# Copyright (c) 2020 Bradley Whited
 #
 # SPDX-License-Identifier: MIT
 #++
-
 
 require 'test_helper'
 
 require 'attr_bool'
 
-###
-# @author Jonathan Bradley Whited
-# @since  0.1.0
-###
 class AttrBoolTest < TestHelper
   def setup
     @bag = TestBag.new
@@ -143,10 +138,6 @@ class AttrBoolTest < TestHelper
     assert_equal true,@bag.bor?
   end
 
-  ###
-  # @author Jonathan Bradley Whited
-  # @since  0.2.0
-  ###
   class TestBag
     extend AttrBool::Ext
 

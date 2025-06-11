@@ -3,20 +3,15 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020-2021 Jonathan Bradley Whited
+# Copyright (c) 2020 Bradley Whited
 #
 # SPDX-License-Identifier: MIT
 #++
-
 
 require 'test_helper'
 
 require 'attr_bool/core_ext'
 
-###
-# @author Jonathan Bradley Whited
-# @since  0.2.0
-###
 class CoreExtTest < TestHelper
   def setup
     @bag = TestBag.new
@@ -36,10 +31,6 @@ class CoreExtTest < TestHelper
     assert_equal true ,@bag.boolor?
   end
 
-  ###
-  # @author Jonathan Bradley Whited
-  # @since  0.2.0
-  ###
   class TestBag
     attr_accessor? :acc
     attr_reader?   :read

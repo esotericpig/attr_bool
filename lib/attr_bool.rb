@@ -3,31 +3,24 @@
 
 #--
 # This file is part of AttrBool.
-# Copyright (c) 2020-2021 Jonathan Bradley Whited
+# Copyright (c) 2020 Bradley Whited
 #
 # SPDX-License-Identifier: MIT
 #++
 
-
 require 'attr_bool/version'
 
-###
-# @author Jonathan Bradley Whited
-# @since  0.1.0
-###
+# :since: 0.1.0
 module AttrBool
-  ###
   # Benchmarks are kind of meaningless, but after playing around with some,
   # I found the following to be the case on my system:
   # - +define_method+ is faster than +module_eval+ & +class_eval+
-  # - +? true : false+ (ternary operator) is faster than +!!+ (surprisingly)
+  # - <tt>? true : false</tt> (ternary operator) is faster than <tt>!!</tt> (surprisingly)
   #
   # To run benchmark code:
-  #   $ bundle exec rake benchmark
+  #   bundle exec rake benchmark
   #
-  # @author Jonathan Bradley Whited
-  # @since  0.2.0
-  ###
+  # :since: 0.2.0
   module Ext
     def attr_accessor?(*var_ids,default: nil,reader: nil,writer: nil,&block)
       if block

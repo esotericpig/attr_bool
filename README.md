@@ -1,14 +1,13 @@
 # AttrBool
 
 [![Gem Version](https://badge.fury.io/rb/attr_bool.svg)](https://badge.fury.io/rb/attr_bool)
-
 [![Source Code](https://img.shields.io/badge/source-github-%23211F1F.svg)](https://github.com/esotericpig/attr_bool)
 [![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/github/license/esotericpig/attr_bool.svg)](LICENSE.txt)
 
 Easily create `attr` (attribute) methods that end with question marks (`?`).
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 module Wearable
@@ -27,7 +26,7 @@ class BananaHammock
   attr_bool? :crap_bag
 end
 
-banham = BananaHammock.new()
+banham = BananaHammock.new
 
 banham.in_fashion = true
 banham.princess   = true
@@ -40,7 +39,7 @@ p banham.crap_bag?    #=> false
 
 Require `attr_bool/core_ext` to extend the core (monkey-patch) `Module` & `Class` (not recommended for libraries):
 
-```Ruby
+```ruby
 require 'attr_bool/core_ext'
 
 class BananaHammock
@@ -49,7 +48,7 @@ class BananaHammock
 end
 ```
 
-## Contents
+## // Contents
 
 - [Similar Projects](#-similar-projects)
 - [Setup](#-setup)
@@ -62,9 +61,9 @@ end
     - [Benchmarks](#-benchmarks)
 - [License](#-license)
 
-## [//](#contents) Similar Projects
+## [//](#-contents) Similar Projects
 
-Create an [issue](https://github.com/esotericpig/attr_bool/issues) to add your project.
+Create a [discussion](https://github.com/esotericpig/attr_bool/discussions) or an [issue](https://github.com/esotericpig/attr_bool/issues) to add your project.
 
 | Gem Name | Code | Example |
 | --- | --- | --- |
@@ -85,32 +84,32 @@ Searches:
 - [The Ruby Toolbox](https://www.ruby-toolbox.com/search?q=attr+bool)
 - [RubyGems.org](https://rubygems.org/search?query=attr+OR+attribute)
 
-## [//](#contents) Setup
+## [//](#-contents) Setup
 
 Add `attr_bool` to your *Gemspec* or *Gemfile*.
 
 Or, use the *RubyGems* package manager:
 
-```
-$ gem install attr_bool
-```
-
-Or, manually:
-
-```
-$ git clone 'https://github.com/esotericpig/attr_bool.git'
-$ cd attr_bool
-$ bundle install
-$ bundle exec rake install:local
+```bash
+gem install attr_bool
 ```
 
-## [//](#contents) Usage
+Or, from source:
+
+```bash
+git clone --depth 1 'https://github.com/esotericpig/attr_bool.git'
+cd attr_bool
+bundle install
+bundle exec rake install:local
+```
+
+## [//](#-contents) Usage
 
 Either require `attr_bool` or `attr_bool/core_ext`.
 
 The first one requires extending `AttrBool::Ext` manually.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
@@ -123,7 +122,7 @@ end
 
 The second one automatically extends `Module` & `Class`, which is not recommended for sharing libraries.
 
-```Ruby
+```ruby
 require 'attr_bool/core_ext'
 
 class Game
@@ -138,7 +137,7 @@ These do **not** force the values to be booleans (true or false).
 
 For most purposes, this is adequate.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
@@ -147,7 +146,7 @@ class Game
   attr_accessor? :running,'looper'
   attr_reader?   :fps,'music'
 
-  def initialize()
+  def initialize
     @running = false
     @looper  = nil
     @fps     = 60
@@ -155,7 +154,7 @@ class Game
   end
 end
 
-game = Game.new()
+game = Game.new
 
 puts game.running?  #=> false
 puts game.looper?   #=> nil
@@ -173,15 +172,15 @@ There is also `attr_writer?`, but it simply calls the standard `attr_writer` unl
 
 To enforce boolean (true or false) values, use...
 
-| Name | Access |
-| --- | --- |
+| Name                         | Access   |
+|------------------------------|----------|
 | `attr_bool` or `attr_boolor` | accessor |
-| `attr_bool?` | reader |
-| `attr_booler` | writer |
+| `attr_bool?`                 | reader   |
+| `attr_booler`                | writer   |
 
 These are slightly slower due to always checking the values.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
@@ -191,18 +190,18 @@ class Game
   attr_bool?  :fps,'music'
   attr_booler :sound
 
-  def initialize()
+  def initialize
     @fps   = 60
     @music = 'Beatles'
     @sound = false
   end
 
-  def loud?()
+  def loud?
     music? && @sound == true
   end
 end
 
-game = Game.new()
+game = Game.new
 
 puts game.running?  #=> false
 puts game.looper?   #=> false
@@ -219,7 +218,7 @@ puts game.looper?   #=> true
 puts game.loud?     #=> true
 ```
 
-### [///](#contents) Default Values
+### [///](#-contents) Default Values
 
 A default value can be passed in, but I don't recommend using it because it's slightly slower due to always checking the value and not setting the instance variable directly.
 
@@ -229,7 +228,7 @@ If the last argument is not a `Symbol` or a `String`, then it will be used as th
 
 **Note:** `attr_writer?` &amp; `attr_booler` can **not** take in a default value.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
@@ -242,7 +241,7 @@ class Game
   attr_bool? :min_force,:max_force,110
 end
 
-game = Game.new()
+game = Game.new
 
 puts game.running?    #=> false
 puts game.looper?     #=> false
@@ -256,7 +255,7 @@ puts game.max_force?  #=> true (not 110)
 
 Instead of the last argument, you can use the `default:` keyword argument. In addition to being more clear, this allows you to pass in a `String` or a `Symbol`.
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
@@ -266,7 +265,7 @@ class Game
   attr_reader?   :music,:sound,default: 'quiet!'
 end
 
-game = Game.new()
+game = Game.new
 
 puts game.running?  #=> :main
 puts game.looper?   #=> :main
@@ -274,49 +273,51 @@ puts game.music?    #=> 'quiet!'
 puts game.sound?    #=> 'quiet!'
 ```
 
-### [///](#contents) Block/Proc/Lambda
+### [///](#-contents) Block/Proc/Lambda
 
 A block can be passed in for dynamic values, but I don't recommend using it. However, many Gems do this, so I also added this functionality anyway.
 
 With blocks, you can quickly write a dynamic attribute that depends on other variable(s) or tests variable(s) in some other special way.
 
-**Note:** blocks do **not** update the instance variables; you must do this manually within the block. `attr_accessor?/reader?/writer?` &amp; `attr_bool*` with blocks are exactly the same code (i.e., boolean values are not enforced).
+**Note:** blocks do **not** update the instance variables; you must do this manually within the block. `attr_accessor?/reader?/writer?` & `attr_bool*` with blocks are exactly the same code (i.e., boolean values are not enforced).
 
-```Ruby
+```ruby
 require 'attr_bool'
 
 class Game
   extend AttrBool::Ext
 
-  attr_reader?(:lag)  { print @ping,','; @ping > 300 }
-  attr_writer?(:ping) {|value| @ping = value.to_i() }
+  attr_reader?(:lag)  { print(@ping,',') || @ping > 300 }
+  attr_writer?(:ping) { |value| @ping = value.to_i }
 
   # Define 1 block for both reader & writer together.
-  attr_accessor?(:sound) do |value=nil|
+  attr_accessor?(:sound) do |value = nil|
     if value.nil? # Assume reader
       print @sound,','
       @sound > 0
     else # Assume writer
-      @sound = value.to_i() % 100
+      @sound = value.to_i % 100
     end
   end
 
-  attr_bool?(:slow) { print @fps,','; @fps < 30 }
-  attr_booler(:fps) {|value| @fps = value.to_i() }
+  attr_bool?(:slow) { print(@fps,',') || @fps < 30 }
+  attr_booler(:fps) { |value| @fps = value.to_i }
 
   # Define separate blocks.
-  attr_bool(:music,
-    reader: -> { print @music,','; !@music.nil? },
-    writer: ->(value) { @music = value.to_sym() }
+  attr_bool(
+    :music,
+    reader: -> { print(@music,',') || !@music.nil? },
+    writer: ->(value) { @music = value.to_sym }
   )
 
   # Define only 1 block.
-  attr_accessor?(:frames,
+  attr_accessor?(
+    :frames,
     reader: -> { @frames.odd? }
   )
 end
 
-game = Game.new()
+game = Game.new
 
 game.ping   = 310.99
 game.sound  = 199.99
@@ -331,9 +332,9 @@ puts game.music?   #=> :Beatles,true
 puts game.frames?  #=> true
 ```
 
-### [///](#contents) Complete Example
+### [///](#-contents) Complete Example
 
-```Ruby
+```ruby
 require 'attr_bool/core_ext'
 
 module Wearable
@@ -348,15 +349,15 @@ class BananaHammock
   # +attr_bool*+ enforce boolean (true or false) values.
   attr_bool   :princess,:prince,default: 'Consuela'
   attr_bool?  :can_swim,:can_wink,true
-  attr_bool? (:crap_bag) { princess? && can_swim? }
+  attr_bool?(:crap_bag) { princess? && can_swim? }
   attr_booler :friends
 
-  def for_friends()
+  def for_friends
     @friends
   end
 end
 
-banham = BananaHammock.new()
+banham = BananaHammock.new
 
 puts banham.in_fashion?  #=> nil
 puts banham.in_season?   #=> nil
@@ -385,7 +386,7 @@ puts banham.crap_bag?    #=> false (dynamic; because +princess?+ is now false)
 puts banham.for_friends  #=> true  (not 'Valerie')
 ```
 
-### [///](#contents) YARDoc
+### [///](#-contents) YARDoc
 
 A custom `AttributeHandler` plugin is planned for the next version:
 
@@ -394,7 +395,7 @@ A custom `AttributeHandler` plugin is planned for the next version:
 
 For now, please use one of YARDoc's built-in ways:
 
-```Ruby
+```ruby
 attr_accessor? :winning # @!attribute [rw] winning=(value),winning?
 attr_reader?   :running # @!attribute [r]  running?
 
@@ -438,70 +439,45 @@ Further reading:
 - [Tags#Macro](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#macro)
 - [Tags#Attribute](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#attribute)
 
-## [//](#contents) Hacking
+## [//](#-contents) Hacking
 
-```
-$ git clone 'https://github.com/esotericpig/attr_bool.git'
-$ cd attr_bool
-$ bundle install
-$ bundle exec rake -T
-```
-
-### Test
-
-```
-$ bundle exec rake test
+```bash
+git clone 'https://github.com/esotericpig/attr_bool.git'
+cd attr_bool
+bundle install
+bundle exec rake -T
 ```
 
-### Generate Doc
+Run tests:
 
-```
-$ bundle exec rake doc
-```
-
-### Install Locally
-
-```
-$ bundle exec rake install:local
+```bash
+bundle exec rake test
 ```
 
-### Release
+Generate doc:
 
-```
-$ bundle exec rake release
+```bash
+bundle exec rake doc
 ```
 
-### [///](#contents) Benchmarks
+Install locally:
+
+```bash
+bundle exec rake install:local
+```
+
+### [///](#-contents) Benchmarks
 
 There are some benchmarks that test `define_method` vs `module_eval` and `? true : false` vs `!!`.
 
 To run these on your system:
 
+```bash
+bundle exec rake benchmark
 ```
-$ bundle exec rake benchmark
-```
 
-## [//](#contents) License
+## [//](#-contents) License
 
-[MIT](LICENSE.txt)
-
-> AttrBool (https://github.com/esotericpig/attr_bool)  
-> Copyright (c) 2020-2021 Jonathan Bradley Whited  
-> 
-> Permission is hereby granted, free of charge, to any person obtaining a copy  
-> of this software and associated documentation files (the "Software"), to deal  
-> in the Software without restriction, including without limitation the rights  
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
-> copies of the Software, and to permit persons to whom the Software is  
-> furnished to do so, subject to the following conditions:  
-> 
-> The above copyright notice and this permission notice shall be included in all  
-> copies or substantial portions of the Software.  
-> 
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE  
-> SOFTWARE.  
+AttrBool (https://github.com/esotericpig/attr_bool)  
+Copyright (c) 2020-2025 Bradley Whited  
+[MIT License](LICENSE.txt)  

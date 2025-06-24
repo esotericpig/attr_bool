@@ -10,5 +10,5 @@
 
 require 'attr_bool'
 
-# This works for both `class` & `module` because `class` extends `module`.
+# This works for both classes & modules because Class is a child of Module.
 Module.prepend(AttrBool::Ext)

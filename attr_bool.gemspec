@@ -10,14 +10,17 @@ Gem::Specification.new do |spec|
   spec.email       = ['code@esotericpig.com']
   spec.licenses    = ['MIT']
   spec.homepage    = 'https://github.com/esotericpig/attr_bool'
-  spec.summary     = 'Finally attr_accessor & attr_reader with question marks for booleans!?'
-  spec.description = <<-DESC.gsub(/\s+/,' ').strip
+  spec.summary     = 'Finally attr_accessor? & attr_reader? with question marks for booleans/predicates!?'
+  spec.description = <<~DESC
     #{spec.summary}
-    Simply use: attr_accessor?, attr_reader?, attr_bool, attr_bool?.
-    Default values can also be passed in as the last argument
-      or with the 'default: ' keyword argument.
-    In a Module/Class, extend 'AttrBool::Ext',
-      or in the file, require 'attr_bool/core_ext'.
+
+    Do one of the following:
+      (1) in your top module, add `using AttrBool::Ref`,
+      or (2) in your module/class, add `extend AttrBool::Ext`,
+      or (3) in your script/app (not a gem/library), include `require 'attr_bool/core_ext'`.
+
+    Now simply use any:
+      attr_accessor?, attr_reader?, attr_writer?, attr_bool, attr_bool?, attr_bool!
   DESC
 
   spec.metadata = {
@@ -36,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = %w[LICENSE.txt README.md]
   spec.rdoc_options     = [
     %w[--embed-mixins --hyperlink-all --line-numbers --show-hash],
+    '--markup','markdown',
     '--title',"AttrBool v#{AttrBool::VERSION}",
     '--main','README.md',
   ].flatten
@@ -44,7 +48,7 @@ Gem::Specification.new do |spec|
     Dir.glob("{#{spec.require_paths.join(',')}}/**/*.{erb,rb}"),
     Dir.glob("#{spec.bindir}/*"),
     Dir.glob('{spec,test}/**/*.{erb,rb}'),
-    %W[Gemfile #{spec.name}.gemspec Rakefile .rdoc_options],
+    %W[.rdoc_options Gemfile #{spec.name}.gemspec Rakefile],
     spec.extra_rdoc_files,
   ].flatten
 end

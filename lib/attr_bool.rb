@@ -10,168 +10,119 @@
 
 require 'attr_bool/version'
 
-# :since: 0.1.0
+##
+# TODO: simple example
 module AttrBool
-  # Benchmarks are kind of meaningless, but after playing around with some,
-  # I found the following to be the case on my system:
-  # - +define_method+ is faster than +module_eval+ & +class_eval+
-  # - <tt>? true : false</tt> (ternary operator) is faster than <tt>!!</tt> (surprisingly)
-  #
-  # To run benchmark code:
-  #   bundle exec rake benchmark
-  #
-  # :since: 0.2.0
+  ##
+  # TODO: simple example
   module Ext
-    def attr_accessor?(*var_ids,default: nil,reader: nil,writer: nil,&block)
-      if block
-        reader = block if reader.nil?
-        writer = block if writer.nil?
-      end
+    #--
+    # NOTE: Not using `self.` for extended/included/prepended() so that including a module that extends
+    #       `AttrBool::Ext` works without having to extend `AttrBool::Ext` again.
+    #++
 
-      if default.nil? && reader.nil?
-        last = var_ids[-1]
-
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop
-        end
-      end
-
-      attr_reader?(*var_ids,default: default,&reader)
-      attr_writer?(*var_ids,&writer)
+    def extended(mod)
+      super
+      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
     end
 
-    def attr_reader?(*var_ids,default: nil,&block)
-      no_default = (default.nil? && !block)
+    def included(mod)
+      super
+      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+    end
 
-      if no_default
-        last = var_ids[-1]
+    def prepended(mod)
+      super
+      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+    end
 
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop
-          no_default = false
-        end
-      end
+    def attr_accessor?(*names,reader: nil,writer: nil)
+      return __attr_bool(names,reader: reader,writer: writer)
+    end
 
-      var_ids.each do |var_id|
-        var_id_q = :"#{var_id}?"
+    def attr_reader?(*names,&reader)
+      return __attr_bool(names,reader: reader)
+    end
 
-        if no_default
-          define_method(var_id_q) do
-            instance_variable_get(:"@#{var_id}")
+    def attr_writer?(*names,&writer)
+      return __attr_bool(names,writer: writer)
+    end
+
+    def attr_bool(*names,reader: nil,writer: nil)
+      return __attr_bool(names,reader: reader,writer: writer,force_bool: true)
+    end
+
+    def attr_bool?(*names,&reader)
+      return __attr_bool(names,reader: reader,force_bool: true)
+    end
+
+    def attr_bool!(*names,&writer)
+      return __attr_bool(names,writer: writer,force_bool: true)
+    end
+
+    private
+
+    def __attr_bool(names,reader: false,writer: false,force_bool: false)
+      # For DSL chaining, must return the method names created, like core `attr_accessor`/etc. does.
+      # Example: protected attr_bool :banana_hammock
+      method_names = []
+
+      # noinspection RubySimplifyBooleanInspection
+      names.map do |name|
+        ivar = :"@#{name}"
+
+        if reader != false # false, nil, or Proc.
+          name_q = :"#{name}?"
+          method_names << name_q
+
+          if reader # Proc?
+            if force_bool
+              define_method(name_q) { instance_exec(&reader) ? true : false }
+            else
+              define_method(name_q,&reader)
+            end
+          else # nil?
+            instance_variable_get(ivar) # Fail fast if `ivar` is invalid.
+
+            if force_bool
+              define_method(name_q) { instance_variable_get(ivar) ? true : false }
+            else
+              define_method(name_q) { instance_variable_get(ivar) }
+            end
           end
-        else
-          if block
-            define_method(var_id_q,&block)
-          else
-            at_var_id = :"@#{var_id}"
+        end
 
-            define_method(var_id_q) do
-              instance_variable_defined?(at_var_id) ? instance_variable_get(at_var_id) : default
+        if writer != false # false, nil, or Proc.
+          name_eq = :"#{name}="
+          method_names << name_eq
+
+          if writer # Proc?
+            if force_bool
+              define_method(name_eq) { |value| instance_exec(value ? true : false,&writer) }
+            else
+              define_method(name_eq,&writer)
+            end
+          else # nil?
+            instance_variable_get(ivar) # Fail fast if `ivar` is invalid.
+
+            if force_bool
+              define_method(name_eq) { |value| instance_variable_set(ivar,value ? true : false) }
+            else
+              define_method(name_eq) { |value| instance_variable_set(ivar,value) }
             end
           end
         end
       end
+
+      return method_names
     end
+  end
 
-    # This should only be used when you want to pass in a block/proc.
-    def attr_writer?(*var_ids,&block)
-      if block
-        var_ids.each do |var_id|
-          define_method(:"#{var_id}=",&block)
-        end
-      else
-        last = var_ids[-1]
-
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          raise ArgumentError,'default value not allowed for writer'
-        end
-
-        attr_writer(*var_ids)
-      end
-    end
-
-    def attr_bool(*var_ids,default: nil,reader: nil,writer: nil,&block)
-      if block
-        reader = block if reader.nil?
-        writer = block if writer.nil?
-      end
-
-      if default.nil? && reader.nil?
-        last = var_ids[-1]
-
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          default = var_ids.pop
-        end
-      end
-
-      attr_bool?(*var_ids,default: default,&reader)
-      attr_booler(*var_ids,&writer)
-    end
-    alias_method :attr_boolor,:attr_bool
-
-    def attr_bool?(*var_ids,default: nil,&block)
-      no_default = default.nil?
-
-      if no_default
-        no_default = !block
-
-        if no_default
-          last = var_ids[-1]
-
-          if !last.is_a?(String) && !last.is_a?(Symbol)
-            default = var_ids.pop ? true : false
-            no_default = false
-          end
-        end
-      else
-        default = default ? true : false
-      end
-
-      var_ids.each do |var_id|
-        var_id_q = :"#{var_id}?"
-
-        if no_default
-          define_method(var_id_q) do
-            instance_variable_get(:"@#{var_id}") ? true : false
-          end
-        else
-          if block
-            define_method(var_id_q,&block)
-          else
-            at_var_id = :"@#{var_id}"
-
-            define_method(var_id_q) do
-              if instance_variable_defined?(at_var_id)
-                instance_variable_get(at_var_id) ? true : false
-              else
-                default
-              end
-            end
-          end
-        end
-      end
-    end
-
-    def attr_booler(*var_ids,&block)
-      if !block
-        last = var_ids[-1]
-
-        if !last.is_a?(String) && !last.is_a?(Symbol)
-          raise ArgumentError,'default value not allowed for writer'
-        end
-      end
-
-      var_ids.each do |var_id|
-        var_id_eq = :"#{var_id}="
-
-        if block
-          define_method(var_id_eq,&block)
-        else
-          define_method(var_id_eq) do |value|
-            instance_variable_set(:"@#{var_id}",value ? true : false)
-          end
-        end
-      end
+  ##
+  # TODO: simple example
+  module Ref
+    refine Module do
+      import_methods AttrBool::Ext
     end
   end
 end

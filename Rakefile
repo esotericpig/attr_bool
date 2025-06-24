@@ -12,22 +12,39 @@ require 'rdoc/task'
 CLEAN.exclude('{.git,.github,.idea,stock}/**/*')
 CLOBBER.include('doc/')
 
-task default: [:test]
+task default: %i[test]
 
-Rake::TestTask.new do |task|
-  task.libs = ['lib','test']
-  task.pattern = 'test/**/*_test.rb'
-  task.warning = true
-  task.verbose = false
+desc 'Run all tests'
+task test: %i[test:base test:core_ext]
+
+TEST_DIR = 'test/**'
+CORE_EXT_TEST = 'core_ext_test.rb'
+
+namespace :test do
+  {
+    base: FileList["#{TEST_DIR}/*_test.rb"].exclude("**/#{CORE_EXT_TEST}"),
+    core_ext: FileList["#{TEST_DIR}/#{CORE_EXT_TEST}"],
+  }.each do |name,test_files|
+    Rake::TestTask.new(name) do |t|
+      t.libs = ['lib','test']
+      t.test_files = test_files
+      t.warning = true
+      t.verbose = false
+    end
+  end
 end
 
-RDoc::Task.new(:doc) do |task|
-  task.rdoc_dir = 'doc'
-  task.title = "AttrBool v#{AttrBool::VERSION}"
+RDoc::Task.new(:doc) do |t|
+  t.rdoc_dir = 'doc'
+  t.title = "AttrBool v#{AttrBool::VERSION}"
 end
 
+# Benchmarks are kind of meaningless, but after playing around with some,
+# I found the following to be true on my system:
+# - +define_method+ is faster than +module_eval+/+class_eval+.
+# - <tt>? true : false</tt> (ternary operator) is faster than <tt>!!</tt> (surprisingly).
 desc 'Benchmark define_method vs module_eval and ?: vs bangbang'
-task :benchmark do |_task|
+task :benchmark do
   # rubocop:disable all
 
   N0 = 100_000

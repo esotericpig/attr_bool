@@ -6,9 +6,10 @@ source 'https://rubygems.org'
 gemspec
 
 group(:development,:test) do
-  gem 'bundler' ,'~>  2.6 '
-  gem 'rake'    ,'~> 13.3 '
-  gem 'rdoc'    ,'~>  6.14' # Doc.
+  gem 'benchmark','~>  0.4 ' # For benchmarks in Rakefile.
+  gem 'bundler'  ,'~>  2.6 '
+  gem 'rake'     ,'~> 13.3 '
+  gem 'rdoc'     ,'~>  6.14'
 end
 
 group(:test) do

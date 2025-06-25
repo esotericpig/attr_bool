@@ -60,7 +60,9 @@ module AttrBool
       return __attr_bool(names,writer: writer,force_bool: true)
     end
 
-    private
+    # NOTE: On JRuby (and maybe other Ruby implementations?), `using AttrBool::Ref` does NOT include
+    #       private methods, so just let it be public.
+    # private
 
     def __attr_bool(names,reader: false,writer: false,force_bool: false)
       # For DSL chaining, must return the method names created, like core `attr_accessor`/etc. does.

@@ -41,92 +41,104 @@ end
 
 # Benchmarks are kind of meaningless, but after playing around with some,
 # I found the following to be true on my system:
-# - +define_method+ is faster than +module_eval+/+class_eval+.
-# - <tt>? true : false</tt> (ternary operator) is faster than <tt>!!</tt> (surprisingly).
-desc 'Benchmark define_method vs module_eval and ?: vs bangbang'
-task :benchmark do
-  # rubocop:disable all
+# - define_method() is faster than class/module_eval().
+# - `? true : false` (ternary operator) is faster than `!!` (surprisingly).
+desc 'Benchmark code related to AttrBool'
+task :bench do
+  bench_def_methods
+  bench_force_bools
+  puts
+end
 
-  N0 = 100_000
-  N1 = 20_000_000
+def bench_def_methods
+  # rubocop:disable Style/DocumentDynamicEvalDefinition,Style/EvalWithLocation
 
-  module ModuleExt
-    def do_class_eval(name)
-      0.upto(N0) do |i|
-        n = "#{name}#{i}"
-
-        class_eval("def #{n}?(); @#{n}; end")
-      end
-    end
-
-    def do_define_method(name)
-      0.upto(N0) do |i|
-        n = "#{name}#{i}"
-
-        define_method(:"#{n}?") do
-          instance_variable_get(:"@#{n}")
-        end
-      end
-    end
-
-    def do_module_eval(name)
-      0.upto(N0) do |i|
-        n = "#{name}#{i}"
-
-        module_eval("def #{n}?(); @#{n}; end")
-      end
-    end
-  end
-
-  Module.prepend ModuleExt
+  n = 200_000
 
   puts
   Benchmark.bmbm do |bm|
     bm.report('class_eval   ') do
-      class ClassEvalTest
-        do_class_eval :ce
+      Class.new do
+        n.times do |i|
+          name = "bool_#{i}"
+          class_eval("def #{name}?; @#{name}; end")
+        end
       end
     end
 
     bm.report('define_method') do
-      class DefineMethodTest
-        do_define_method :dm
+      Class.new do
+        n.times do |i|
+          name = "bool_#{i}"
+          define_method(:"#{name}?") { instance_variable_get(:"@#{name}") }
+        end
       end
     end
 
     bm.report('module_eval  ') do
-      class ModuleEvalTest
-        do_module_eval :me
+      Class.new do
+        n.times do |i|
+          name = "bool_#{i}"
+          module_eval("def #{name}?; @#{name}; end")
+        end
       end
     end
   end
 
-  str = 'str' # Warning workaround
+  # rubocop:enable all
+end
+
+def bench_force_bools
+  # rubocop:disable Style/DoubleNegation
+
+  n = 5_000_000
+  values = ['str',1,0,1.0,0.0,nil,true,false]
 
   puts
   Benchmark.bmbm do |bm|
     bm.report('?:') do
-      0.upto(N1) do |i|
-        x = str   ? true : false
-        x = nil   ? true : false
-        x = true  ? true : false
-        x = false ? true : false
-        x = x     ? true : false
+      n.times do
+        x = nil
+        values.each do |value|
+          x = value ? true : false
+        end
+        x
       end
     end
 
     bm.report('!!') do
-      0.upto(N1) do |i|
-        y = !!str
-        y = !!nil
-        y = !!true
-        y = !!false
-        y = !!y
+      n.times do
+        x = nil
+        values.each do |value|
+          x = !!value
+        end
+        x
       end
     end
   end
 
   puts
+  Benchmark.bmbm do |bm|
+    bm.report('!!') do
+      n.times do
+        x = nil
+        values.each do |value|
+          x = !!value
+        end
+        x
+      end
+    end
+
+    bm.report('?:') do
+      n.times do
+        x = nil
+        values.each do |value|
+          x = value ? true : false
+        end
+        x
+      end
+    end
+  end
 
   # rubocop:enable all
 end

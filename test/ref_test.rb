@@ -18,17 +18,11 @@ describe AttrBool::Ref do
 
       expect do
         Class.new do
-          attr_reader :read01
-        end
-      end.wont_be_nil # Won't raise.
-
-      expect do
-        Class.new do
           attr_bool :acc01
         end
       end.must_raise(NoMethodError)
       expect do
-        Class.new do
+        Module.new do
           attr_bool :acc01
         end
       end.must_raise(NoMethodError)
@@ -90,9 +84,9 @@ describe AttrBool::Ref do
 end
 
 module RefTest
-  class TestBag
-    using AttrBool::Ref
+  using AttrBool::Ref
 
+  class TestBag
     attr_accessor? :acc01
     attr_bool      :acc02
     attr_reader?   :read01
@@ -117,8 +111,6 @@ module RefTest
   end
 
   module TestBagMixin
-    using AttrBool::Ref
-
     attr_accessor? :acc01
     attr_bool      :acc02
     attr_reader?   :read01

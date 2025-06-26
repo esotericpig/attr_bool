@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = %w[LICENSE.txt README.md]
   spec.rdoc_options     = [
     %w[--embed-mixins --hyperlink-all --line-numbers --show-hash],
+    '--encoding','UTF-8',
     '--markup','markdown',
     '--title',"AttrBool v#{AttrBool::VERSION}",
     '--main','README.md',

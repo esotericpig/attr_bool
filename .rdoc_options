@@ -1,7 +1,5 @@
 ---
-charset: UTF-8
 encoding: UTF-8
-
 op_dir: doc
 title: AttrBool
 main_page: README.md

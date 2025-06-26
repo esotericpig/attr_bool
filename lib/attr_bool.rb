@@ -23,17 +23,17 @@ module AttrBool
 
     def extended(mod)
       super
-      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+      __attr_bool_extended(mod)
     end
 
     def included(mod)
       super
-      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+      __attr_bool_extended(mod)
     end
 
     def prepended(mod)
       super
-      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+      __attr_bool_extended(mod)
     end
 
     def attr_accessor?(*names,reader: nil,writer: nil)
@@ -60,9 +60,11 @@ module AttrBool
       return __attr_bool(names,writer: writer,force_bool: true)
     end
 
-    # NOTE: On JRuby (and maybe other Ruby implementations?), `using AttrBool::Ref` does NOT include
-    #       private methods, so just let it be public.
-    # private
+    private
+
+    def __attr_bool_extended(mod)
+      mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+    end
 
     def __attr_bool(names,reader: false,writer: false,force_bool: false)
       # For DSL chaining, must return the method names created, like core `attr_accessor`/etc. does.
@@ -124,7 +126,60 @@ module AttrBool
   # TODO: simple example
   module Ref
     refine Module do
-      import_methods AttrBool::Ext
+      # NOTE: JRuby (and maybe other implementations?) has a bug with importing methods that internally
+      #       call other refined methods, so the workaround is to not use import_methods().
+      if RUBY_PLATFORM != 'java'
+        import_methods AttrBool::Ext
+      else
+        def extended(mod)
+          super
+          __attr_bool_extended(mod)
+        end
+
+        def included(mod)
+          super
+          __attr_bool_extended(mod)
+        end
+
+        def prepended(mod)
+          super
+          __attr_bool_extended(mod)
+        end
+
+        def attr_accessor?(*names,reader: nil,writer: nil)
+          return __attr_bool(names,reader: reader,writer: writer)
+        end
+
+        def attr_reader?(*names,&reader)
+          return __attr_bool(names,reader: reader)
+        end
+
+        def attr_writer?(*names,&writer)
+          return __attr_bool(names,writer: writer)
+        end
+
+        def attr_bool(*names,reader: nil,writer: nil)
+          return __attr_bool(names,reader: reader,writer: writer,force_bool: true)
+        end
+
+        def attr_bool?(*names,&reader)
+          return __attr_bool(names,reader: reader,force_bool: true)
+        end
+
+        def attr_bool!(*names,&writer)
+          return __attr_bool(names,writer: writer,force_bool: true)
+        end
+
+        private
+
+        def __attr_bool_extended(mod)
+          mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
+        end
+
+        def __attr_bool(names,**kargs)
+          return AttrBool::Ext.instance_method(:__attr_bool).bind_call(self,names,**kargs)
+        end
+      end
     end
   end
 end

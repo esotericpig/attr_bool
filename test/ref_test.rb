@@ -63,9 +63,11 @@ describe AttrBool::Ref do
 
     it_has_the_attr_bools
 
-    it 'refines the core Class & Module inside of its scope only once' do
-      _(RefTest::TestBag.class_used_modules.count(AttrBool::Ref)).must_equal(1)
-      _(RefTest::TestBag.module_used_modules.count(AttrBool::Ref)).must_equal(1)
+    if RUBY_PLATFORM != 'java'
+      it 'refines the core Class & Module inside of its scope only once' do
+        _(RefTest::TestBag.class_used_modules.count(AttrBool::Ref)).must_equal(1)
+        _(RefTest::TestBag.module_used_modules.count(AttrBool::Ref)).must_equal(1)
+      end
     end
   end
 
@@ -76,9 +78,11 @@ describe AttrBool::Ref do
 
     it_has_the_attr_bools
 
-    it 'refines the core Class & Module inside of its scope only once' do
-      _(@sut.class_used_modules.count(AttrBool::Ref)).must_equal(1)
-      _(@sut.module_used_modules.count(AttrBool::Ref)).must_equal(1)
+    if RUBY_PLATFORM != 'java'
+      it 'refines the core Class & Module inside of its scope only once' do
+        _(@sut.class_used_modules.count(AttrBool::Ref)).must_equal(1)
+        _(@sut.module_used_modules.count(AttrBool::Ref)).must_equal(1)
+      end
     end
   end
 end

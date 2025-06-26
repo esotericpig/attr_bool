@@ -197,6 +197,18 @@ describe AttrBool::Ext do
     end
   end
 
+  describe 'extended module that was prepended' do
+    before do
+      @sut = ExtTest::TestBagWithMixinPrepended.new
+    end
+
+    it_has_the_attr_bools
+
+    it 'has the child attr bools' do
+      _(@sut.read13?).must_equal(true)
+    end
+  end
+
   describe 'invalid attr names' do
     it 'fails fast for attr_accessor?' do
       expect do
@@ -402,6 +414,18 @@ module ExtTest
       super
 
       @read14 = :read14_value
+    end
+  end
+
+  class TestBagWithMixinPrepended
+    prepend TestBagMixin
+
+    attr_bool? :read13
+
+    def initialize
+      super
+
+      @read13 = :read13_value
     end
   end
 end

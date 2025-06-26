@@ -49,6 +49,7 @@ jobs:
       run: bundle exec rake test
 
     - name: Test doc
+      if: "${{ matrix.ruby != 'jruby-head' }}"
       run: bundle exec rake doc
 
     - name: Test build & install

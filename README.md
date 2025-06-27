@@ -1,51 +1,39 @@
 # AttrBool
 
 [![Gem Version](https://badge.fury.io/rb/attr_bool.svg)](https://badge.fury.io/rb/attr_bool)
+[![Tests Status](https://github.com/esotericpig/attr_bool/actions/workflows/ruby.yml/badge.svg)](https://github.com/esotericpig/attr_bool/actions/workflows/ruby.yml)
 [![Source Code](https://img.shields.io/badge/source-github-%23211F1F.svg)](https://github.com/esotericpig/attr_bool)
 [![Changelog](https://img.shields.io/badge/changelog-md-%23A0522D.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/github/license/esotericpig/attr_bool.svg)](LICENSE.txt)
 
-Easily create `attr` (attribute) methods that end with question marks (`?`).
+Easily create `attr` (attribute) methods that end with question marks (`?`) for booleans/predicates.
 
 ```ruby
 require 'attr_bool'
 
-module Wearable
+class TheTodd
   extend AttrBool::Ext
+  #using AttrBool::Ref  # Can use refinements instead.
 
-  attr_accessor? :in_fashion
-  attr_reader?   :can_wash
+  attr_accessor? :headband
+  attr_reader?   :banana_hammock
+  attr_writer?   :high_five
+
+  # Can do DSL chaining.
+  protected attr_accessor? :carla_kiss, :elliot_kiss
+
+  # Can force bool values (i.e., only `true` or `false`).
+  attr_bool      :bounce_pecs  # Accessor.
+  attr_bool?     :cat_fight    # Reader.
+  attr_bool!     :hot_tub      # Writer.
 end
 
-class BananaHammock
-  extend AttrBool::Ext
-  include Wearable
+todd = TheTodd.new
 
-  # Enforce boolean (true or false) values.
-  attr_bool  :princess
-  attr_bool? :crap_bag
-end
-
-banham = BananaHammock.new
-
-banham.in_fashion = true
-banham.princess   = true
-
-p banham.in_fashion?  #=> true
-p banham.can_wash?    #=> nil
-p banham.princess?    #=> true
-p banham.crap_bag?    #=> false
-```
-
-Require `attr_bool/core_ext` to extend the core (monkey-patch) `Module` & `Class` (not recommended for libraries):
-
-```ruby
-require 'attr_bool/core_ext'
-
-class BananaHammock
-  attr_bool  :princess
-  attr_bool? :crap_bag
-end
+puts todd.headband?
+puts todd.banana_hammock?
+puts todd.bounce_pecs?
+puts todd.cat_fight?
 ```
 
 ## // Contents
@@ -53,9 +41,7 @@ end
 - [Similar Projects](#-similar-projects)
 - [Setup](#-setup)
 - [Usage](#-usage)
-    - [Complete Example](#-complete-example)
-    - [Default Values](#-default-values)
-    - [Block/Proc/Lambda](#-blockproclambda)
+    - [RuboCop](#-rubocop)
     - [YARDoc](#-yardoc)
 - [Hacking](#-hacking)
     - [Benchmarks](#-benchmarks)
@@ -63,38 +49,57 @@ end
 
 ## [//](#-contents) Similar Projects
 
-Create a [discussion](https://github.com/esotericpig/attr_bool/discussions) or an [issue](https://github.com/esotericpig/attr_bool/issues) to add your project.
+Create a [discussion](https://github.com/esotericpig/attr_bool/discussions) or an [issue](https://github.com/esotericpig/attr_bool/issues) to let me know to add your project.
 
-| Gem Name | Code | Example |
-| --- | --- | --- |
-| [attr_asker](https://rubygems.org/gems/attr_asker) | [[GitHub]](https://github.com/kitlangton/attr_asker) | `attr_asker :running` |
-| [attr_boolean](https://rubygems.org/gems/attr_boolean) | [[GitHub]](https://github.com/talentnest/attr_boolean) | `attr_boolean :running, default: true` |
-| [attr_setting](https://rubygems.org/gems/attr_setting) | [[GitHub]](https://github.com/merhard/attr_setting) | `attr_setting :running, true` |
-| [attribool](https://rubygems.org/gems/attribool) | [[GitHub]](https://github.com/evanthegrayt/attribool) | `bool_reader :name` |
-| [attribute_boolean](https://rubygems.org/gems/attribute_boolean) | [[GitHub]](https://github.com/alexmchale/attribute_boolean) | `attr_boolean :running` |
-| [boolean_accessor](https://rubygems.org/gems/boolean_accessor) | [[GitHub]](https://github.com/hiroki23/boolean_accessor) | `battr_accessor :running` |
-| [named_accessors](https://rubygems.org/gems/named_accessors) | [[GitHub]](https://github.com/zlw/named_accessors) | `named_reader :running, as: :running?` |
-| [property-accessor](https://rubygems.org/gems/property-accessor) | [[GitHub]](https://github.com/estepnv/property-accessor) | `property(:running) { get(:running?); default { true } }` |
-| [question_mark_methods](https://rubygems.org/gems/question_mark_methods) | [[GitHub]](https://github.com/poiyzy/questionmarkmethods) | `add_question_mark_methods running?: :running` |
-| [wannabe_bool](https://rubygems.org/gems/wannabe_bool) | [[GitHub]](https://github.com/prodis/wannabe_bool) | `attr_wannabe_bool :running` |
-| [wardrobe](https://rubygems.org/gems/wardrobe) | [[GitHub]](https://github.com/agensdev/wardrobe) | `attribute :running, Wardrobe::Boolean, default: true` |
+| Gem Name                                                                 | Code                                                          | Example                                                   |
+|--------------------------------------------------------------------------|---------------------------------------------------------------|-----------------------------------------------------------|
+| [attr_asker](https://rubygems.org/gems/attr_asker)                       | [GitHub](https://github.com/kitlangton/attr_asker)            | `attr_asker :winning`                                     |
+| [attr_boolean](https://rubygems.org/gems/attr_boolean)                   | [GitHub](https://github.com/talentnest/attr_boolean)          | `attr_boolean :winning, default: true`                    |
+| [attr_setting](https://rubygems.org/gems/attr_setting)                   | [GitHub](https://github.com/merhard/attr_setting)             | `attr_setting :winning, true`                             |
+| [attribool](https://rubygems.org/gems/attribool)                         | [GitHub](https://github.com/evanthegrayt/attribool)           | `bool_reader :winning`                                    |
+| [attribute_boolean](https://rubygems.org/gems/attribute_boolean)         | [GitHub](https://github.com/alexmchale/attribute_boolean)     | `attr_boolean :winning`                                   |
+| [attribute_predicates](https://rubygems.org/gems/attribute_predicates)   | [GitHub](https://github.com/pluginaweek/attribute_predicates) | `attr :winning, true`                                     |
+| [boolean_accessor](https://rubygems.org/gems/boolean_accessor)           | [GitHub](https://github.com/hiroki23/boolean_accessor)        | `battr_accessor :winning`                                 |
+| [named_accessors](https://rubygems.org/gems/named_accessors)             | [GitHub](https://github.com/zlw/named_accessors)              | `named_reader :winning, as: :winning?`                    |
+| [predicateable](https://rubygems.org/gems/predicateable)                 | [GitHub](https://github.com/nsgc/predicateable)               | `predicate :wins, [:losing, :winning]`                    |
+| [predicates](https://rubygems.org/gems/predicates)                       | [GitHub](https://github.com/Erol/predicates)                  | `predicate :winning?`                                     |
+| [property-accessor](https://rubygems.org/gems/property-accessor)         | [GitHub](https://github.com/estepnv/property-accessor)        | `property(:winning) { get(:winning?); default { true } }` |
+| [question_mark_methods](https://rubygems.org/gems/question_mark_methods) | [GitHub](https://github.com/poiyzy/questionmarkmethods)       | `add_question_mark_methods winning?: :winning`            |
+| [wannabe_bool](https://rubygems.org/gems/wannabe_bool)                   | [GitHub](https://github.com/prodis/wannabe_bool)              | `attr_wannabe_bool :winning`                              |
+| [wardrobe](https://rubygems.org/gems/wardrobe)                           | [GitHub](https://github.com/agensdev/wardrobe)                | `attribute :winning, Wardrobe::Boolean, default: true`    |
 
 Searches:
 
-- [The Ruby Toolbox](https://www.ruby-toolbox.com/search?q=attr+bool)
-- [RubyGems.org](https://rubygems.org/search?query=attr+OR+attribute)
+| Site             | Searches                                                                                                                 |
+|------------------|--------------------------------------------------------------------------------------------------------------------------|
+| The Ruby Toolbox | [1](https://www.ruby-toolbox.com/search?q=attr+bool), [2](https://www.ruby-toolbox.com/search?q=predicate)               |
+| RubyGems.org     | [1](https://rubygems.org/search?query=attr+OR+attribute), [2](https://rubygems.org/search?query=predicates+OR+predicate) |
 
 ## [//](#-contents) Setup
 
-Add `attr_bool` to your *Gemspec* or *Gemfile*.
+Pick your poison...
 
-Or, use the *RubyGems* package manager:
+Use the *RubyGems* package manager:
 
 ```bash
 gem install attr_bool
 ```
 
-Or, from source:
+Or add to your *Gemspec*:
+
+```ruby
+spec.add_dependency 'attr_bool', '~> X.X'
+```
+
+Or add to your *Gemfile*:
+
+```ruby
+# Pick your poison...
+gem 'attr_bool', '~> X.X'
+gem 'attr_bool', git: 'https://github.com/esotericpig/attr_bool.git'
+```
+
+Or install from source:
 
 ```bash
 git clone --depth 1 'https://github.com/esotericpig/attr_bool.git'
@@ -105,295 +110,92 @@ bundle exec rake install:local
 
 ## [//](#-contents) Usage
 
-Either require `attr_bool` or `attr_bool/core_ext`.
-
-The first one requires extending `AttrBool::Ext` manually.
+You can either add `extend AttrBool::Ext` in your class/module, add `using AttrBool::Ref` in your class/module, or include `require 'attr_bool/core_ext'`.
 
 ```ruby
 require 'attr_bool'
 
-class Game
+class TheTodd
   extend AttrBool::Ext
+  #using AttrBool::Ref  # Can use refinements instead.
 
-  attr_accessor? :running
-  attr_reader?   :winning
+  # Can use multiple symbols and/or strings.
+  attr_accessor? :flexing, 'bounce_pecs'
+
+  # Can do DSL chaining.
+  protected attr_accessor? :high_five, 'fist_bump'
+
+  # Can do custom logic.
+  attr_accessor? :headband, 'banana_hammock',
+                 reader: -> { @wearing == :flaming },
+                 writer: ->(value) { @wearing = value }
+
+  attr_reader?(:cat_fights)    { @cat_fights % 69 }
+  attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
+
+  # Can force bool values (i.e., only `true` or `false`).
+  attr_bool  :carla_kiss   # Accessor.
+  attr_bool? :elliot_kiss  # Reader.
+  attr_bool! :thumbs_up    # Writer.
 end
 ```
 
-The second one automatically extends `Module` & `Class`, which is not recommended for sharing libraries.
+If you don't want to have to add `extend AttrBool::Ext` to every class/module, you can simply refine the top module in your gem/library/app:
+
+```ruby
+require 'attr_bool'
+
+module TheToddMod
+  using AttrBool::Ref
+end
+
+# --- Some other file.
+module TheToddMod
+  class TheTodd
+    attr_bool :banana_hammock
+  end
+end
+```
+
+If you only have an app/script (**not** a library), then you can simply require `'attr_bool/core_ext'` to monkey-patch the core class & module:
 
 ```ruby
 require 'attr_bool/core_ext'
 
-class Game
-  attr_accessor? :running
-  attr_reader?   :winning
+class TheTodd
+  attr_bool :banana_hammock
 end
 ```
 
-Now, simply use `attr_accessor?` and/or `attr_reader?` with one or more Symbols and/or Strings.
+### [///](#-contents) RuboCop
 
-These do **not** force the values to be booleans (true or false).
-
-For most purposes, this is adequate.
+RuboCop might complain about `Layout/EmptyLinesAroundAttributeAccessor`:
 
 ```ruby
-require 'attr_bool'
-
-class Game
-  extend AttrBool::Ext
-
-  attr_accessor? :running,'looper'
-  attr_reader?   :fps,'music'
-
-  def initialize
-    @running = false
-    @looper  = nil
-    @fps     = 60
-    @music   = 'Beatles'
-  end
+class TheTodd
+  attr_accessor? :banana_hammock
+  attr_accessor  :headband
+  attr_accessor? :bounce_pecs
 end
-
-game = Game.new
-
-puts game.running?  #=> false
-puts game.looper?   #=> nil
-puts game.fps?      #=> 60
-puts game.music?    #=> 'Beatles'
-
-game.running = true
-game.looper  = :main
-
-puts game.running?  #=> true
-puts game.looper?   #=> :main
 ```
 
-There is also `attr_writer?`, but it simply calls the standard `attr_writer` unless you pass in a [block](#-blockproclambda).
+You can either disable this Cop or adjust it accordingly:
 
-To enforce boolean (true or false) values, use...
-
-| Name                         | Access   |
-|------------------------------|----------|
-| `attr_bool` or `attr_boolor` | accessor |
-| `attr_bool?`                 | reader   |
-| `attr_booler`                | writer   |
-
-These are slightly slower due to always checking the values.
-
-```ruby
-require 'attr_bool'
-
-class Game
-  extend AttrBool::Ext
-
-  attr_bool   :running,'looper'
-  attr_bool?  :fps,'music'
-  attr_booler :sound
-
-  def initialize
-    @fps   = 60
-    @music = 'Beatles'
-    @sound = false
-  end
-
-  def loud?
-    music? && @sound == true
-  end
-end
-
-game = Game.new
-
-puts game.running?  #=> false
-puts game.looper?   #=> false
-puts game.fps?      #=> true
-puts game.music?    #=> true
-puts game.loud?     #=> false
-
-game.running = true
-game.looper  = :main
-game.sound   = 'loud!'
-
-puts game.running?  #=> true
-puts game.looper?   #=> true
-puts game.loud?     #=> true
-```
-
-### [///](#-contents) Default Values
-
-A default value can be passed in, but I don't recommend using it because it's slightly slower due to always checking the value and not setting the instance variable directly.
-
-It's best to just set the default values the standard way in `initialize()`. However, many Gems do this, so I also added this functionality anyway.
-
-If the last argument is not a `Symbol` or a `String`, then it will be used as the default value.
-
-**Note:** `attr_writer?` &amp; `attr_booler` can **not** take in a default value.
-
-```ruby
-require 'attr_bool'
-
-class Game
-  extend AttrBool::Ext
-
-  attr_accessor? :running,:looper,false
-  attr_reader?   :min_fps,:max_fps,60
-
-  attr_bool  :gravity,:wind,true
-  attr_bool? :min_force,:max_force,110
-end
-
-game = Game.new
-
-puts game.running?    #=> false
-puts game.looper?     #=> false
-puts game.min_fps?    #=> 60
-puts game.max_fps?    #=> 60
-puts game.gravity?    #=> true
-puts game.wind?       #=> true
-puts game.min_force?  #=> true (not 110)
-puts game.max_force?  #=> true (not 110)
-```
-
-Instead of the last argument, you can use the `default:` keyword argument. In addition to being more clear, this allows you to pass in a `String` or a `Symbol`.
-
-```ruby
-require 'attr_bool'
-
-class Game
-  extend AttrBool::Ext
-
-  attr_accessor? :running,:looper,default: :main
-  attr_reader?   :music,:sound,default: 'quiet!'
-end
-
-game = Game.new
-
-puts game.running?  #=> :main
-puts game.looper?   #=> :main
-puts game.music?    #=> 'quiet!'
-puts game.sound?    #=> 'quiet!'
-```
-
-### [///](#-contents) Block/Proc/Lambda
-
-A block can be passed in for dynamic values, but I don't recommend using it. However, many Gems do this, so I also added this functionality anyway.
-
-With blocks, you can quickly write a dynamic attribute that depends on other variable(s) or tests variable(s) in some other special way.
-
-**Note:** blocks do **not** update the instance variables; you must do this manually within the block. `attr_accessor?/reader?/writer?` & `attr_bool*` with blocks are exactly the same code (i.e., boolean values are not enforced).
-
-```ruby
-require 'attr_bool'
-
-class Game
-  extend AttrBool::Ext
-
-  attr_reader?(:lag)  { print(@ping,',') || @ping > 300 }
-  attr_writer?(:ping) { |value| @ping = value.to_i }
-
-  # Define 1 block for both reader & writer together.
-  attr_accessor?(:sound) do |value = nil|
-    if value.nil? # Assume reader
-      print @sound,','
-      @sound > 0
-    else # Assume writer
-      @sound = value.to_i % 100
-    end
-  end
-
-  attr_bool?(:slow) { print(@fps,',') || @fps < 30 }
-  attr_booler(:fps) { |value| @fps = value.to_i }
-
-  # Define separate blocks.
-  attr_bool(
-    :music,
-    reader: -> { print(@music,',') || !@music.nil? },
-    writer: ->(value) { @music = value.to_sym }
-  )
-
-  # Define only 1 block.
-  attr_accessor?(
-    :frames,
-    reader: -> { @frames.odd? }
-  )
-end
-
-game = Game.new
-
-game.ping   = 310.99
-game.sound  = 199.99
-game.fps    = 29.99
-game.music  = 'Beatles'
-game.frames = 1
-
-puts game.lag?     #=> 310,true
-puts game.sound?   #=> 99,true
-puts game.slow?    #=> 29,true
-puts game.music?   #=> :Beatles,true
-puts game.frames?  #=> true
-```
-
-### [///](#-contents) Complete Example
-
-```ruby
-require 'attr_bool/core_ext'
-
-module Wearable
-  # +attr_accessor?/reader?+ do not enforce boolean (true or false) values.
-  attr_accessor? :in_fashion,:in_season
-  attr_reader?   :can_wash,:can_wear,default: 'yes!'
-end
-
-class BananaHammock
-  include Wearable
-
-  # +attr_bool*+ enforce boolean (true or false) values.
-  attr_bool   :princess,:prince,default: 'Consuela'
-  attr_bool?  :can_swim,:can_wink,true
-  attr_bool?(:crap_bag) { princess? && can_swim? }
-  attr_booler :friends
-
-  def for_friends
-    @friends
-  end
-end
-
-banham = BananaHammock.new
-
-puts banham.in_fashion?  #=> nil
-puts banham.in_season?   #=> nil
-puts banham.can_wash?    #=> 'yes!'
-puts banham.can_wear?    #=> 'yes!'
-puts '---'
-
-puts banham.princess?  #=> true (not 'Consuela')
-puts banham.prince?    #=> true (not 'Consuela')
-puts banham.can_swim?  #=> true
-puts banham.can_wink?  #=> true
-puts banham.crap_bag?  #=> true
-puts '---'
-
-banham.in_fashion = true
-banham.in_season  = 'always'
-banham.princess   = nil
-banham.prince     = 'Charming'
-banham.friends    = 'Valerie'
-
-puts banham.in_fashion?  #=> true
-puts banham.in_season?   #=> 'always'
-puts banham.princess?    #=> false (not nil)
-puts banham.prince?      #=> true  (not 'Charming')
-puts banham.crap_bag?    #=> false (dynamic; because +princess?+ is now false)
-puts banham.for_friends  #=> true  (not 'Valerie')
+```yaml
+Layout/EmptyLinesAroundAttributeAccessor:
+  #Enabled: false
+  AllowedMethods:
+    - attr_accessor?
+    - attr_reader?
+    - attr_writer?
+    - attr_bool
+    - attr_bool?
+    - attr_bool!
 ```
 
 ### [///](#-contents) YARDoc
 
-A custom `AttributeHandler` plugin is planned for the next version:
-
-- [Writing Handlers](https://yardoc.org/guides/extending-yard/writing-handlers.html)
-- [YARD::Handlers::Ruby::AttributeHandler](https://github.com/lsegal/yard/blob/main/lib/yard/handlers/ruby/attribute_handler.rb)
-
-For now, please use one of YARDoc's built-in ways:
+Here are some examples of how to document the methods in YARDoc:
 
 ```ruby
 attr_accessor? :winning # @!attribute [rw] winning=(value),winning?
@@ -419,10 +221,6 @@ attr_accessor? :princess,:crap_bag
 #   Make it in or out of fashion!
 attr_accessor? :in_fashion
 
-# @!method can_wear?
-# @return [true,false] whether it's wearable (default: +true+)
-attr_reader? :can_wear,true
-
 # @!group My Attrs
 # @!attribute [r] in_season?
 attr_reader? :in_season
@@ -433,11 +231,13 @@ attr_reader? :can_wash
 
 Further reading:
 
-- [Documenting Attributes](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#Documenting_Attributes)
-- [Documenting Custom DSL Methods](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#Documenting_Custom_DSL_Methods)
-- [Macros](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#Macros)
-- [Tags#Macro](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#macro)
-- [Tags#Attribute](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#attribute)
+- [Documenting Attributes](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#documenting-attributes)
+  - [Documenting Custom DSL Methods](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#documenting-custom-dsl-methods)
+  - [Tags#Attribute](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#attribute)
+- [Macros](https://www.rubydoc.info/gems/yard/file/docs/GettingStarted.md#macros)
+  - [Tags#Macro](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#macro)
+- [Writing Handlers](https://yardoc.org/guides/extending-yard/writing-handlers.html)
+  - [YARD::Handlers::Ruby::AttributeHandler](https://github.com/lsegal/yard/blob/main/lib/yard/handlers/ruby/attribute_handler.rb)
 
 ## [//](#-contents) Hacking
 
@@ -468,12 +268,16 @@ bundle exec rake install:local
 
 ### [///](#-contents) Benchmarks
 
-There are some benchmarks that test `define_method` vs `module_eval` and `? true : false` vs `!!`.
+Benchmarks are kind of meaningless, but after playing around with some, I found the following to be true on my system:
+- `define_method()` is faster than `class/module_eval()`.
+- `? true : false` (ternary operator) is faster than `!!` (surprisingly).
+
+Therefore, AttrBool uses the "faster" ones found.
 
 To run these on your system:
 
 ```bash
-bundle exec rake benchmark
+bundle exec rake bench
 ```
 
 ## [//](#-contents) License

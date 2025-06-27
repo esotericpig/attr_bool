@@ -1,11 +1,11 @@
-name: Ruby Gem
+name: tests
 
 on:
   workflow_dispatch:
-#  push:
-#    branches: [ 'main' ]
-#  pull_request:
-#    branches: [ 'main' ]
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
 
 permissions:
   contents: read
@@ -47,10 +47,6 @@ jobs:
 
     - name: Run tests
       run: bundle exec rake test
-
-    - name: Test doc
-      if: "${{ matrix.ruby != 'jruby-head' }}"
-      run: bundle exec rake doc
 
     - name: Test build & install
       run: |

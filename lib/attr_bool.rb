@@ -11,10 +11,50 @@
 require 'attr_bool/version'
 
 ##
-# TODO: simple example
+# Example usage:
+# ```
+# require 'attr_bool'
+#
+# class TheTodd
+#   extend AttrBool::Ext
+#   #using AttrBool::Ref  # Can use refinements instead.
+#
+#   # Can use multiple symbols and/or strings.
+#   attr_accessor? :flexing, 'bounce_pecs'
+#
+#   # Can do DSL chaining.
+#   protected attr_accessor? :high_five, 'fist_bump'
+#
+#   # Can do custom logic.
+#   attr_accessor? :headband, 'banana_hammock',
+#                  reader: -> { @wearing == :flaming },
+#                  writer: ->(value) { @wearing = value }
+#
+#   attr_reader?(:cat_fights)    { @cat_fights % 69 }
+#   attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
+#
+#   # Can force bool values (i.e., only `true` or `false`).
+#   attr_bool  :carla_kiss   # Accessor.
+#   attr_bool? :elliot_kiss  # Reader.
+#   attr_bool! :thumbs_up    # Writer.
+# end
+# ```
 module AttrBool
   ##
-  # TODO: simple example
+  # Example usage:
+  # ```
+  # class TheTodd
+  #   extend AttrBool::Ext
+  #
+  #   attr_accessor? :headband
+  #   attr_reader?   :banana_hammock
+  #   attr_writer?   :high_five
+  #
+  #   attr_bool      :bounce_pecs
+  #   attr_bool?     :cat_fight
+  #   attr_bool!     :hot_tub
+  # end
+  # ```
   module Ext
     #--
     # NOTE: Not using `self.` for extended/included/prepended() so that including a module that extends
@@ -123,8 +163,24 @@ module AttrBool
   end
 
   ##
-  # TODO: simple example
+  # Example usage:
+  # ```
+  # module TheToddMod
+  #   using AttrBool::Ref
+  #
+  #   class TheTodd
+  #     attr_accessor? :headband
+  #     attr_reader?   :banana_hammock
+  #     attr_writer?   :high_five
+  #
+  #     attr_bool      :bounce_pecs
+  #     attr_bool?     :cat_fight
+  #     attr_bool!     :hot_tub
+  #   end
+  # end
+  # ```
   module Ref
+    # This works for both classes & modules because Class is a child of Module.
     refine Module do
       import_methods AttrBool::Ext
 

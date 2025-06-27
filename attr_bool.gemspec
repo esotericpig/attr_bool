@@ -14,13 +14,15 @@ Gem::Specification.new do |spec|
   spec.description = <<~DESC
     #{spec.summary}
 
-    Do one of the following:
+    Usage:
       (1) in your top module, add `using AttrBool::Ref`,
-      or (2) in your module/class, add `extend AttrBool::Ext`,
-      or (3) in your script/app (not a gem/library), include `require 'attr_bool/core_ext'`.
+      or (2) in your class/module, add `extend AttrBool::Ext`,
+      or (3) in your app/script (not library), include `require 'attr_bool/core_ext'`.
 
     Now simply use any:
-      attr_accessor?, attr_reader?, attr_writer?, attr_bool, attr_bool?, attr_bool!
+      [ attr_accessor?, attr_reader?, attr_writer?, attr_bool, attr_bool?, attr_bool! ].
+
+    Keywords: attr, attribute, attributes, bool, boolean, booleans, predicate, predicates
   DESC
 
   spec.metadata = {

@@ -11,7 +11,7 @@
 require 'test_helper'
 
 describe AttrBool::Ref do
-  def self.it_has_the_attr_bools
+  def self.it_refines_the_core_class_and_module
     it 'does not refine the core Class & Module outside of its scope' do
       _(Class.used_modules).wont_include(AttrBool::Ref)
       _(Module.used_modules).wont_include(AttrBool::Ref)
@@ -28,6 +28,16 @@ describe AttrBool::Ref do
       end.must_raise(NoMethodError)
     end
 
+    it 'refines the core Class & Module inside of its scope only once' do
+      # JRuby doesn't implement used_modules() currently.
+      if RUBY_PLATFORM != 'java'
+        _(@sut.class_used_modules.count(AttrBool::Ref)).must_equal(1)
+        _(@sut.module_used_modules.count(AttrBool::Ref)).must_equal(1)
+      end
+    end
+  end
+
+  def self.it_has_the_attr_bools
     it 'has the attr accessors' do
       _(@sut).must_respond_to(:acc01=)
       _(@sut).must_respond_to(:acc02=)
@@ -61,14 +71,8 @@ describe AttrBool::Ref do
       @sut = RefTest::TestBag.new
     end
 
+    it_refines_the_core_class_and_module
     it_has_the_attr_bools
-
-    if RUBY_PLATFORM != 'java'
-      it 'refines the core Class & Module inside of its scope only once' do
-        _(RefTest::TestBag.class_used_modules.count(AttrBool::Ref)).must_equal(1)
-        _(RefTest::TestBag.module_used_modules.count(AttrBool::Ref)).must_equal(1)
-      end
-    end
   end
 
   describe 'refined module' do
@@ -76,14 +80,8 @@ describe AttrBool::Ref do
       @sut = RefTest::TestBagWithMixin.new
     end
 
+    it_refines_the_core_class_and_module
     it_has_the_attr_bools
-
-    if RUBY_PLATFORM != 'java'
-      it 'refines the core Class & Module inside of its scope only once' do
-        _(@sut.class_used_modules.count(AttrBool::Ref)).must_equal(1)
-        _(@sut.module_used_modules.count(AttrBool::Ref)).must_equal(1)
-      end
-    end
   end
 end
 
@@ -105,11 +103,11 @@ module RefTest
       @read02 = :read02_value
     end
 
-    def self.class_used_modules
+    def class_used_modules
       return Class.used_modules
     end
 
-    def self.module_used_modules
+    def module_used_modules
       return Module.used_modules
     end
   end

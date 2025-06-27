@@ -68,7 +68,7 @@ module AttrBool
 
     def __attr_bool(names,reader: false,writer: false,force_bool: false)
       # For DSL chaining, must return the method names created, like core `attr_accessor`/etc. does.
-      # Example: protected attr_bool :banana_hammock
+      # Example: protected attr_bool :banana_hammock,:bounce_pecs
       method_names = []
 
       # noinspection RubySimplifyBooleanInspection
@@ -126,11 +126,11 @@ module AttrBool
   # TODO: simple example
   module Ref
     refine Module do
+      import_methods AttrBool::Ext
+
       # NOTE: JRuby (and maybe other implementations?) has a bug with importing methods that internally
-      #       call other refined methods, so the workaround is to not use import_methods().
-      if RUBY_PLATFORM != 'java'
-        import_methods AttrBool::Ext
-      else
+      #       call other refined methods, so this is the workaround.
+      if RUBY_PLATFORM == 'java'
         def extended(mod)
           super
           __attr_bool_extended(mod)
@@ -168,16 +168,6 @@ module AttrBool
 
         def attr_bool!(*names,&writer)
           return __attr_bool(names,writer: writer,force_bool: true)
-        end
-
-        private
-
-        def __attr_bool_extended(mod)
-          mod.extend(AttrBool::Ext) unless mod.singleton_class.ancestors.include?(AttrBool::Ext)
-        end
-
-        def __attr_bool(names,**kargs)
-          return AttrBool::Ext.instance_method(:__attr_bool).bind_call(self,names,**kargs)
         end
       end
     end

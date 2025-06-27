@@ -273,7 +273,7 @@ describe AttrBool::Ext do
 end
 
 # rubocop:disable Style/AccessModifierDeclarations
-# noinspection RubyArgCount,RubyMismatchedArgumentType
+# noinspection RubyArgCount, RubyMismatchedArgumentType
 module ExtTest
   class TestBag
     extend AttrBool::Ext

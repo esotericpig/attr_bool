@@ -43,11 +43,11 @@ Features:
 - Returns an array of the new method names, just like the core `attr` methods, to allow DSL chaining.
 - Can use refinements (`using AttrBool::Ref`) instead of `extend`.
   - This allows you to refine the top module only of your project, instead of having to extend every class.
-- Fails fast if the instance variable name is invalid (if you don't use a block/proc).
+- Fails fast if an instance variable name is invalid (if you don't use a block/proc).
 
 Anti-features:
 - No default values.
-  - Use `initialize()` like normal to initialize your instance variables.
+  - Initialize your instance variables in `def initialize` like normal.
   - Using default values has performance issues and other drawbacks, so better to just match the core `attr` methods.
 - Uses inner `AttrBool::Ext` & `AttrBool::Ref` instead of `AttrBool`.
   - Some gems use the `extend AttrBool` (top module) pattern, but this includes `VERSION` in all of your classes/modules.

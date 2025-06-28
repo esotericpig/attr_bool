@@ -36,6 +36,24 @@ puts todd.bounce_pecs?
 puts todd.cat_fight?
 ```
 
+Features:
+- Can use multiple symbols and/or strings.
+- Can force bool values.
+- Can define custom logic with a block/proc.
+- Returns an array of the new method names, just like the core `attr` methods, to allow DSL chaining.
+- Can use refinements (`using AttrBool::Ref`) instead of `extend`.
+  - This allows you to refine the top module only of your project, instead of having to extend every class.
+- Fails fast if the instance variable name is invalid (if you don't use a block/proc).
+
+Anti-features:
+- No default values.
+  - Use `initialize()` like normal to initialize your instance variables.
+  - Using default values has performance issues and other drawbacks, so better to just match the core `attr` methods.
+- Uses inner `AttrBool::Ext` & `AttrBool::Ref` instead of `AttrBool`.
+  - Some gems use the `extend AttrBool` (top module) pattern, but this includes `VERSION` in all of your classes/modules.
+- Doesn't monkey-patch the core class/module by default.
+  - If desired for apps/scripts, you still can with `require 'attr_bool/core_ext'`, but not recommended for libraries.
+
 ## // Contents
 
 - [Similar Projects](#-similar-projects)
@@ -79,19 +97,19 @@ Searches:
 
 Pick your poison...
 
-Use the *RubyGems* package manager:
+With the *RubyGems* package manager:
 
 ```bash
 gem install attr_bool
 ```
 
-Or add to your *Gemspec*:
+Or in your *Gemspec*:
 
 ```ruby
 spec.add_dependency 'attr_bool', '~> X.X'
 ```
 
-Or add to your *Gemfile*:
+Or in your *Gemfile*:
 
 ```ruby
 # Pick your poison...
@@ -99,7 +117,7 @@ gem 'attr_bool', '~> X.X'
 gem 'attr_bool', git: 'https://github.com/esotericpig/attr_bool.git'
 ```
 
-Or install from source:
+Or from source:
 
 ```bash
 git clone --depth 1 'https://github.com/esotericpig/attr_bool.git'
@@ -157,7 +175,7 @@ module TheToddMod
 end
 ```
 
-If you only have an app/script (**not** a library), then you can simply require `'attr_bool/core_ext'` to monkey-patch the core class & module:
+If you only have an app/script (**not** a library), then you can simply include `require 'attr_bool/core_ext'` to monkey-patch the core class & module:
 
 ```ruby
 require 'attr_bool/core_ext'

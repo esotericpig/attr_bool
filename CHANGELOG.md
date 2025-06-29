@@ -3,8 +3,12 @@
 - [Keep a Changelog](https://keepachangelog.com/en/1.1.0)
 - [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.3.0...HEAD)
+## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.3.1...HEAD)
 - ...
+
+## [0.3.1](https://github.com/esotericpig/attr_bool/compare/v0.3.0...v0.3.1) - 2025-06-28
+### Changed
+- Minor change to fix README/Gemspec about wording around refinements.
 
 ## [0.3.0](https://github.com/esotericpig/attr_bool/compare/v0.2.2...v0.3.0) - 2025-06-27
 Major change to simplify usage.

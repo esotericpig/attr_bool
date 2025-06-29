@@ -40,15 +40,14 @@ Features:
 - Can use multiple symbols and/or strings.
 - Can force bool values.
 - Can define custom logic with a block/proc.
-- Returns an array of the new method names, just like the core `attr` methods, to allow DSL chaining.
+- Can do DSL chaining, just like the core `attr` methods that return an array of the new method names.
 - Can use refinements (`using AttrBool::Ref`) instead of `extend`.
-  - This allows you to refine the top module only of your project, instead of having to extend every class.
 - Fails fast if an instance variable name is invalid (if you don't use a block/proc).
 
 Anti-features:
 - No default values.
   - Initialize your instance variables in `def initialize` like normal.
-  - Using default values has performance issues and other drawbacks, so better to just match the core `attr` methods.
+  - Using default values has performance/memory issues and other drawbacks, so better to just match the core `attr` methods.
 - Uses inner `AttrBool::Ext` & `AttrBool::Ref` instead of `AttrBool`.
   - Some gems use the `extend AttrBool` (top module) pattern, but this includes `VERSION` in all of your classes/modules.
 - Doesn't monkey-patch the core class/module by default.
@@ -158,19 +157,22 @@ class TheTodd
 end
 ```
 
-If you don't want to have to add `extend AttrBool::Ext` to every class/module, you can simply refine the top module in your gem/library/app:
+If you don't want to have to add `extend AttrBool::Ext` to every inner class/module (within the same file), then you can simply refine the outer module or the file:
 
 ```ruby
 require 'attr_bool'
 
+#using AttrBool::Ref  # Can refine the entire file instead (doesn't affect other files).
+
 module TheToddMod
   using AttrBool::Ref
-end
 
-# --- Some other file.
-module TheToddMod
   class TheTodd
     attr_bool :banana_hammock
+  end
+
+  class TheToddBod
+    attr_bool :bounce_pecs
   end
 end
 ```

@@ -10,9 +10,9 @@ group(:development,:test) do
   gem 'bundler'  ,'~>  2.6 '
   gem 'rake'     ,'~> 13.3 '
   gem 'rdoc'     ,'~>  6.14' # Doc.
-  gem 'simplecov','~>  0.22' # Test coverage.
 end
 
 group(:test) do
-  gem 'minitest','~>  5.25'
+  gem 'minitest' ,'~>  5.25'
+  gem 'simplecov','~>  0.22' # Test coverage.
 end

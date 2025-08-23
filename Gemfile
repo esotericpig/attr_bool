@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group(:development,:test) do
-  gem 'bundler','~> 2.7.0'
+  gem 'bundler','~> 2.6'
   gem 'rake','~> 13.3.0'
 
   gem 'benchmark','~> 0.4.0' # For benchmarks in Rakefile.

@@ -3,8 +3,15 @@
 - [Keep a Changelog](https://keepachangelog.com/en/1.1.0)
 - [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.3.1...HEAD)
+## [[Unreleased]](https://github.com/esotericpig/attr_bool/compare/v0.3.2...HEAD)
 - ...
+
+## [0.3.2](https://github.com/esotericpig/attr_bool/compare/v0.3.1...v0.3.2) - 2025-08-23
+### Changed
+- Minor change to use `each()` instead of `map()` in `__attr_bool()`.
+  - Relic of previous code that returned a `map()` instead of constructing the array manually for DSL chaining.
+- Reformatted Gem versions.
+- Updated README.
 
 ## [0.3.1](https://github.com/esotericpig/attr_bool/compare/v0.3.0...v0.3.1) - 2025-06-28
 ### Changed

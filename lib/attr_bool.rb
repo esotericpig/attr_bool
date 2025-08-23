@@ -15,9 +15,10 @@ require 'attr_bool/version'
 # ```
 # require 'attr_bool'
 #
+# #using AttrBool::Ref  # Can use refinements instead of `extend AttrBool::Ext`.
+#
 # class TheTodd
 #   extend AttrBool::Ext
-#   #using AttrBool::Ref  # Can use refinements instead.
 #
 #   # Can use multiple symbols and/or strings.
 #   attr_accessor? :flexing, 'bounce_pecs'
@@ -25,18 +26,18 @@ require 'attr_bool/version'
 #   # Can do DSL chaining.
 #   protected attr_accessor? :high_five, 'fist_bump'
 #
-#   # Can do custom logic.
-#   attr_accessor? :headband, 'banana_hammock',
-#                  reader: -> { @wearing == :flaming },
-#                  writer: ->(value) { @wearing = value }
-#
-#   attr_reader?(:cat_fights)    { @cat_fights % 69 }
-#   attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
-#
 #   # Can force bool values (i.e., only `true` or `false`).
 #   attr_bool  :carla_kiss   # Accessor.
 #   attr_bool? :elliot_kiss  # Reader.
 #   attr_bool! :thumbs_up    # Writer.
+#
+#   # Can do custom logic with a block/proc/lambda.
+#   attr_reader?(:cat_fights)    { @cat_fights % 69 }
+#   attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
+#
+#   attr_accessor? :headband, 'banana_hammock',
+#                  reader: -> { @wearing == :flaming },
+#                  writer: ->(value) { @wearing = value }
 # end
 # ```
 module AttrBool
@@ -108,30 +109,33 @@ module AttrBool
 
     def __attr_bool(names,reader: false,writer: false,force_bool: false)
       # For DSL chaining, must return the method names created, like core `attr_accessor`/etc. does.
-      # Example: protected attr_bool :banana_hammock,:bounce_pecs
+      # Example:
+      #   protected attr_bool :banana_hammock,:bounce_pecs
       method_names = []
 
       # noinspection RubySimplifyBooleanInspection
-      names.map do |name|
+      names.each do |name|
+        # Most of the time, users will use the `ivar` way, so just create it once here,
+        # instead of potentially twice inside the if-blocks.
         ivar = :"@#{name}"
 
         if reader != false # false, nil, or Proc.
           name_q = :"#{name}?"
           method_names << name_q
 
-          if reader # Proc?
-            if force_bool
-              define_method(name_q) { instance_exec(&reader) ? true : false }
-            else
-              define_method(name_q,&reader)
-            end
-          else # nil?
+          if reader.nil? # Not a Proc?
             instance_variable_get(ivar) # Fail fast if `ivar` is invalid.
 
             if force_bool
               define_method(name_q) { instance_variable_get(ivar) ? true : false }
             else
               define_method(name_q) { instance_variable_get(ivar) }
+            end
+          else # Proc?
+            if force_bool
+              define_method(name_q) { instance_exec(&reader) ? true : false }
+            else
+              define_method(name_q,&reader)
             end
           end
         end
@@ -140,19 +144,19 @@ module AttrBool
           name_eq = :"#{name}="
           method_names << name_eq
 
-          if writer # Proc?
-            if force_bool
-              define_method(name_eq) { |value| instance_exec(value ? true : false,&writer) }
-            else
-              define_method(name_eq,&writer)
-            end
-          else # nil?
+          if writer.nil? # Not a Proc?
             instance_variable_get(ivar) # Fail fast if `ivar` is invalid.
 
             if force_bool
               define_method(name_eq) { |value| instance_variable_set(ivar,value ? true : false) }
             else
               define_method(name_eq) { |value| instance_variable_set(ivar,value) }
+            end
+          else # Proc?
+            if force_bool
+              define_method(name_eq) { |value| instance_exec(value ? true : false,&writer) }
+            else
+              define_method(name_eq,&writer)
             end
           end
         end
@@ -165,6 +169,8 @@ module AttrBool
   ##
   # Example usage:
   # ```
+  # #using AttrBool::Ref  # Can refine the entire file instead (doesn't affect other files).
+  #
   # module TheToddMod
   #   using AttrBool::Ref
   #

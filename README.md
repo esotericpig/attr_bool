@@ -11,9 +11,10 @@ Easily create `attr` (attribute) methods that end with question marks (`?`) for 
 ```ruby
 require 'attr_bool'
 
+#using AttrBool::Ref  # Can use refinements instead of `extend AttrBool::Ext`.
+
 class TheTodd
   extend AttrBool::Ext
-  #using AttrBool::Ref  # Can use refinements instead.
 
   attr_accessor? :headband
   attr_reader?   :banana_hammock
@@ -39,17 +40,17 @@ puts todd.cat_fight?
 Features:
 - Can use multiple symbols and/or strings.
 - Can force bool values.
-- Can define custom logic with a block/proc.
+- Can define custom logic with a block/proc/lambda.
 - Can do DSL chaining, just like the core `attr` methods that return an array of the new method names.
 - Can use refinements (`using AttrBool::Ref`) instead of `extend`.
-- Fails fast if an instance variable name is invalid (if you don't use a block/proc).
+- Fails fast if an instance variable name is invalid (if you don't use a block/proc/lambda).
 
 Anti-features:
 - No default values.
   - Initialize your instance variables in `def initialize` like normal.
   - Using default values has performance/memory issues and other drawbacks, so better to just match the core `attr` methods.
 - Uses inner `AttrBool::Ext` & `AttrBool::Ref` instead of `AttrBool`.
-  - Some gems use the `extend AttrBool` (top module) pattern, but this includes `VERSION` in all of your classes/modules.
+  - Some gems use the `extend AttrBool` (top module) pattern, but this includes the `VERSION` constant in all of your classes/modules.
 - Doesn't monkey-patch the core class/module by default.
   - If desired for apps/scripts, you still can with `require 'attr_bool/core_ext'`, but not recommended for libraries.
 
@@ -105,14 +106,14 @@ gem install attr_bool
 Or in your *Gemspec*:
 
 ```ruby
-spec.add_dependency 'attr_bool', '~> X.X'
+spec.add_dependency 'attr_bool', '~> X.X.X'
 ```
 
 Or in your *Gemfile*:
 
 ```ruby
 # Pick your poison...
-gem 'attr_bool', '~> X.X'
+gem 'attr_bool', '~> X.X.X'
 gem 'attr_bool', git: 'https://github.com/esotericpig/attr_bool.git'
 ```
 
@@ -127,7 +128,7 @@ bundle exec rake install:local
 
 ## [//](#-contents) Usage
 
-You can either add `extend AttrBool::Ext` in your class/module, add `using AttrBool::Ref` in your class/module, or include `require 'attr_bool/core_ext'`.
+You can either add `using AttrBool::Ref` in your class/module/file, add `extend AttrBool::Ext` in your class/module, or include `require 'attr_bool/core_ext'`.
 
 ```ruby
 require 'attr_bool'
@@ -142,18 +143,18 @@ class TheTodd
   # Can do DSL chaining.
   protected attr_accessor? :high_five, 'fist_bump'
 
-  # Can do custom logic.
-  attr_accessor? :headband, 'banana_hammock',
-                 reader: -> { @wearing == :flaming },
-                 writer: ->(value) { @wearing = value }
-
-  attr_reader?(:cat_fights)    { @cat_fights % 69 }
-  attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
-
   # Can force bool values (i.e., only `true` or `false`).
   attr_bool  :carla_kiss   # Accessor.
   attr_bool? :elliot_kiss  # Reader.
   attr_bool! :thumbs_up    # Writer.
+
+  # Can do custom logic with a block/proc/lambda.
+  attr_reader?(:cat_fights)    { @cat_fights % 69 }
+  attr_writer?(:hot_surgeries) { |count| @hot_surgeries += count }
+
+  attr_accessor? :headband, 'banana_hammock',
+                 reader: -> { @wearing == :flaming },
+                 writer: ->(value) { @wearing = value }
 end
 ```
 
@@ -199,7 +200,7 @@ class TheTodd
 end
 ```
 
-You can either disable this Cop or adjust it accordingly:
+You can either adjust this Cop accordingly or disable it:
 
 ```yaml
 Layout/EmptyLinesAroundAttributeAccessor:

@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
     #{spec.summary}
 
     To get started, pick one:
-      (1) in your class/module, add `using AttrBool::Ref`,
+      (1) in your class/module/file, add `using AttrBool::Ref`,
       or (2) in your class/module, add `extend AttrBool::Ext`,
       or (3) in your app/script (not library), include `require 'attr_bool/core_ext'`.
 

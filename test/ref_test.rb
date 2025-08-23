@@ -29,7 +29,7 @@ describe AttrBool::Ref do
     end
 
     it 'refines the core Class & Module inside of its scope only once' do
-      # JRuby doesn't implement used_modules() currently.
+      # NOTE: JRuby doesn't implement used_modules() currently.
       if RUBY_PLATFORM != 'java'
         _(@sut.class_used_modules.count(AttrBool::Ref)).must_equal(1)
         _(@sut.module_used_modules.count(AttrBool::Ref)).must_equal(1)
